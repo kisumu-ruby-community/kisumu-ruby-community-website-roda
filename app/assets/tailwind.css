@@ -1,1 +1,212 @@
 @import "tailwindcss";
+
+/* ── Raw palette ── */
+:root {
+  --ruby-50: #fff1f1;
+  --ruby-100: #ffe0df;
+  --ruby-200: #ffc4c2;
+  --ruby-300: #ff9591;
+  --ruby-400: #f85d5a;
+  --ruby-500: #e8302a;
+  --ruby-600: #cc342d;
+  --ruby-700: #a8261f;
+  --ruby-800: #8b1c15;
+  --ruby-900: #72180f;
+  --ruby-950: #3f0905;
+
+  --amber-400: #fbbf24;
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+  --amber-300: #fcd34d;
+
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  --slate-950: #020617;
+}
+
+/* ── Semantic tokens – light ── */
+:root {
+  --color-primary: var(--ruby-600);
+  --color-primary-hover: var(--ruby-700);
+  --color-primary-active: var(--ruby-800);
+  --color-primary-subtle: var(--ruby-50);
+  --color-primary-muted: var(--ruby-100);
+  --color-primary-foreground: #ffffff;
+
+  --color-accent: var(--amber-500);
+  --color-accent-hover: var(--amber-600);
+  --color-accent-foreground: var(--slate-900);
+
+  --color-bg: #ffffff;
+  --color-bg-subtle: var(--slate-50);
+  --color-bg-muted: var(--slate-100);
+  --color-card: #ffffff;
+  --color-card-hover: var(--slate-50);
+
+  --color-foreground: var(--slate-900);
+  --color-foreground-muted: var(--slate-600);
+  --color-foreground-subtle: var(--slate-400);
+  --color-foreground-inverse: #ffffff;
+
+  --color-border: var(--slate-200);
+  --color-border-strong: var(--slate-300);
+  --color-border-muted: var(--slate-100);
+
+  --color-ring: var(--ruby-300);
+
+  --color-success: #16a34a;
+  --color-success-bg: #f0fdf4;
+  --color-success-border: #bbf7d0;
+  --color-success-foreground: #15803d;
+
+  --color-error: #dc2626;
+  --color-error-bg: #fef2f2;
+  --color-error-border: #fecaca;
+  --color-error-foreground: #b91c1c;
+}
+
+/* ── Semantic tokens – dark ── */
+.dark {
+  --color-primary: var(--ruby-400);
+  --color-primary-hover: var(--ruby-300);
+  --color-primary-active: var(--ruby-200);
+  --color-primary-subtle: var(--ruby-950);
+  --color-primary-muted: var(--ruby-900);
+
+  --color-accent: var(--amber-400);
+  --color-accent-hover: var(--amber-300);
+  --color-accent-foreground: var(--slate-900);
+
+  --color-bg: var(--slate-950);
+  --color-bg-subtle: var(--slate-900);
+  --color-bg-muted: var(--slate-800);
+  --color-card: var(--slate-900);
+  --color-card-hover: var(--slate-800);
+
+  --color-foreground: var(--slate-50);
+  --color-foreground-muted: var(--slate-400);
+  --color-foreground-subtle: var(--slate-600);
+
+  --color-border: var(--slate-800);
+  --color-border-strong: var(--slate-700);
+  --color-border-muted: var(--slate-900);
+
+  --color-ring: var(--ruby-700);
+
+  --color-success-bg: rgba(22, 163, 74, 0.12);
+  --color-success-border: rgba(22, 163, 74, 0.3);
+  --color-error-bg: rgba(220, 38, 38, 0.12);
+  --color-error-border: rgba(220, 38, 38, 0.3);
+}
+
+/* ── Tailwind v4 theme registration ── */
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-active: var(--color-primary-active);
+  --color-primary-subtle: var(--color-primary-subtle);
+  --color-primary-muted: var(--color-primary-muted);
+  --color-primary-foreground: var(--color-primary-foreground);
+
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-foreground: var(--color-accent-foreground);
+
+  --color-bg: var(--color-bg);
+  --color-bg-subtle: var(--color-bg-subtle);
+  --color-bg-muted: var(--color-bg-muted);
+  --color-card: var(--color-card);
+  --color-card-hover: var(--color-card-hover);
+
+  --color-foreground: var(--color-foreground);
+  --color-foreground-muted: var(--color-foreground-muted);
+  --color-foreground-subtle: var(--color-foreground-subtle);
+  --color-foreground-inverse: var(--color-foreground-inverse);
+
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-border-muted: var(--color-border-muted);
+
+  --color-ring: var(--color-ring);
+
+  --color-success: var(--color-success);
+  --color-success-bg: var(--color-success-bg);
+  --color-success-border: var(--color-success-border);
+  --color-success-foreground: var(--color-success-foreground);
+
+  --color-error: var(--color-error);
+  --color-error-bg: var(--color-error-bg);
+  --color-error-border: var(--color-error-border);
+  --color-error-foreground: var(--color-error-foreground);
+
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Space Mono", "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* ── Base styles ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family:
+    "Space Grotesk",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: "Space Mono", "JetBrains Mono", ui-monospace, monospace;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Animations ── */
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 180ms ease-out both;
+}
+
+/* ── Nav active state ── */
+.nav-link-active {
+  color: var(--color-primary) !important;
+  background-color: var(--color-primary-subtle) !important;
+}
