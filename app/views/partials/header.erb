@@ -1,22 +1,126 @@
-<header class="fixed top-0 left-0 right-0 z-50 w-full bg-white shadow-sm">
-  <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-    <nav class="flex h-16 items-center justify-between">
+<header
+  id="site-header"
+  role="banner"
+  class="fixed top-0 left-0 right-0 z-50 w-full bg-bg/95 backdrop-blur-sm border-b border-transparent transition-all duration-200"
+>
+  <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+    <nav aria-label="Main navigation" class="flex h-16 items-center justify-between">
 
-      <a href="/" class="flex items-center">
-        <img src="assets/logo/KRC-1.png" alt="Kisumu Ruby Community" class="h-18 w-auto" />
-        <span class="text-lg font-bold text-red-600">Kisumu Ruby Community</span>
+      <!-- Logo -->
+      <a href="/" class="flex items-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary" aria-label="Kisumu Ruby Community - Go to homepage">
+        <img src="assets/logo/KRC-1.png" alt="Kisumu Ruby Community" class="h-14 w-auto" />
       </a>
 
-      <ul class="hidden lg:flex items-center gap-1">
-        <li><a href="/" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">Home</a></li>
-        <li><a href="/contact" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">Contact</a></li>
-        <li><a href="/about" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">About</a></li>
+      <!-- Desktop nav -->
+      <ul role="list" class="hidden lg:flex items-center gap-0.5">
+        <li><a href="/"        class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Home</a></li>
+        <li><a href="/contact" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Contact</a></li>
+        <li><a href="/about"   class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">About</a></li>
       </ul>
 
-      <a href="/join" class="inline-flex items-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700">
-        Join Community
-      </a>
+      <!-- Right actions -->
+      <div class="flex items-center gap-2">
+        <a href="/join" class="hidden lg:inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary-hover active:bg-primary-active transition-colors duration-150">
+          Join Community
+        </a>
 
+        <!-- Mobile hamburger -->
+        <button
+          id="menu-btn"
+          type="button"
+          aria-controls="mobile-nav"
+          aria-expanded="false"
+          aria-label="Open navigation menu"
+          class="lg:hidden rounded-md p-2 text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150"
+        >
+          <!-- Hamburger icon -->
+          <svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <!-- Close icon -->
+          <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
     </nav>
   </div>
+
+  <!-- Mobile drawer -->
+  <div
+    id="mobile-nav"
+    role="dialog"
+    aria-modal="false"
+    aria-label="Navigation menu"
+    class="hidden lg:hidden absolute right-0 top-full w-[75vw] bg-bg border border-border shadow-xl rounded-bl-xl px-4 pb-5 pt-3 animate-slide-down overflow-y-auto max-h-[calc(100vh-4rem)]"
+  >
+    <ul role="list" class="space-y-0.5">
+      <li><a href="/"        class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Home</a></li>
+      <li><a href="/contact" class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Contact</a></li>
+      <li><a href="/about"   class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">About</a></li>
+    </ul>
+    <div class="mt-4 pt-4 border-t border-border">
+      <a href="/join" class="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover active:bg-primary-active transition-colors duration-150">
+        Join Community
+      </a>
+    </div>
+  </div>
 </header>
+
+<script>
+  (function () {
+    const header    = document.getElementById('site-header');
+    const btn       = document.getElementById('menu-btn');
+    const drawer    = document.getElementById('mobile-nav');
+    const iconMenu  = document.getElementById('icon-menu');
+    const iconClose = document.getElementById('icon-close');
+
+    // Scroll-aware shadow + border
+    window.addEventListener('scroll', function () {
+      const scrolled = window.scrollY > 16;
+      header.classList.toggle('shadow-sm', scrolled);
+      header.style.borderColor = scrolled ? 'var(--color-border)' : 'transparent';
+    }, { passive: true });
+
+    // Toggle mobile drawer
+    function openMenu() {
+      drawer.classList.remove('hidden');
+      btn.setAttribute('aria-expanded', 'true');
+      btn.setAttribute('aria-label', 'Close navigation menu');
+      iconMenu.classList.add('hidden');
+      iconClose.classList.remove('hidden');
+      drawer.querySelector('a')?.focus();
+    }
+
+    function closeMenu() {
+      drawer.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Open navigation menu');
+      iconMenu.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+      btn.focus();
+    }
+
+    btn.addEventListener('click', function () {
+      drawer.classList.contains('hidden') ? openMenu() : closeMenu();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !drawer.classList.contains('hidden')) closeMenu();
+    });
+
+    // Close on outside click
+    document.addEventListener('click', function (e) {
+      if (!header.contains(e.target) && !drawer.classList.contains('hidden')) closeMenu();
+    });
+
+    // Active link highlight
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-link').forEach(function (link) {
+      const href = link.getAttribute('href');
+      const isActive = href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+      if (isActive) link.classList.add('nav-link-active');
+    });
+  })();
+</script>
