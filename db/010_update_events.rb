@@ -1,7 +1,6 @@
 Sequel.migration do
   up do
     alter_table(:events) do
-      rename_column :type, :event_type
       add_column :end_date,    DateTime
       add_column :meeting_url, String
     end
@@ -11,7 +10,6 @@ Sequel.migration do
   end
   down do
     alter_table(:events) do
-      rename_column :event_type, :type
       drop_column :end_date
       drop_column :meeting_url
     end
