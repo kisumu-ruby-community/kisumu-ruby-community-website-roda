@@ -3,6 +3,7 @@ GEM
   specs:
     bcrypt (3.1.22)
     bigdecimal (4.1.1)
+    dotenv (3.2.0)
     nio4r (2.7.5)
     pg (1.6.3)
     pg (1.6.3-x86_64-linux)
@@ -21,6 +22,7 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt
+  dotenv
   pg
   puma
   rack
@@ -31,6 +33,7 @@ DEPENDENCIES
 CHECKSUMS
   bcrypt (3.1.22) sha256=1f0072e88c2d705d94aff7f2c5cb02eb3f1ec4b8368671e19112527489f29032
   bigdecimal (4.1.1) sha256=1c09efab961da45203c8316b0cdaec0ff391dfadb952dd459584b63ebf8054ca
+  dotenv (3.2.0) sha256=e375b83121ea7ca4ce20f214740076129ab8514cd81378161f11c03853fe619d
   nio4r (2.7.5) sha256=6c90168e48fb5f8e768419c93abb94ba2b892a1d0602cb06eef16d8b7df1dca1
   pg (1.6.3) sha256=1388d0563e13d2758c1089e35e973a3249e955c659592d10e5b77c468f628a99
   pg (1.6.3-x86_64-linux) sha256=5d9e188c8f7a0295d162b7b88a768d8452a899977d44f3274d1946d67920ae8d
