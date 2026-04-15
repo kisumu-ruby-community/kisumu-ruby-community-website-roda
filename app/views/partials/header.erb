@@ -14,9 +14,9 @@
       <!-- Desktop nav -->
       <ul role="list" class="hidden lg:flex items-center gap-0.5">
         <li><a href="/"        class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Home</a></li>
-        <li><a href="/events"  class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Events</a></li>
-        <li><a href="/contact" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Contact</a></li>
-        <li><a href="/about"   class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">About</a></li>
+        <li><a href="/events"  onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('events')?.scrollIntoView({behavior:'smooth'})}"  class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Events</a></li>
+        <li><a href="/contact" onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('contact')?.scrollIntoView({behavior:'smooth'})}" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Contact</a></li>
+        <li><a href="/about"   onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('about')?.scrollIntoView({behavior:'smooth'})}"   class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">About</a></li>
       </ul>
 
       <!-- Right actions -->
@@ -83,9 +83,9 @@
   >
     <ul role="list" class="space-y-0.5">
       <li><a href="/"        class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Home</a></li>
-      <li><a href="/events"  class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Events</a></li>
-      <li><a href="/contact" class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Contact</a></li>
-      <li><a href="/about"   class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">About</a></li>
+      <li><a href="/events"  onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('events')?.scrollIntoView({behavior:'smooth'})}"  class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Events</a></li>
+      <li><a href="/contact" onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('contact')?.scrollIntoView({behavior:'smooth'})}" class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Contact</a></li>
+      <li><a href="/about"   onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('about')?.scrollIntoView({behavior:'smooth'})}"   class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">About</a></li>
     </ul>
     <div class="mt-4 pt-4 border-t border-border space-y-2">
       <% if defined?(current_user) && current_user %>
