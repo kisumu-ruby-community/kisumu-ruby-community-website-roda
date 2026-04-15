@@ -7,9 +7,9 @@ class AboutService
   ].freeze
 
   ORGANIZERS = [
-    { name: "Abraham King'oo", role: "Organizer",       initials: "AK", bio: "Software Engineer. Passionate about Ruby and building developer communities in East Africa." },
-    { name: "Paul Oguda",      role: "Community Lead",  initials: "PO", bio: "Senior Ruby Engineer. Passionate about Ruby, Rails, and mentoring developers." },
-    { name: "John Odhiambo",   role: "Organizer",       initials: "JO", bio: "Software Engineer. Passionate about communities." },
+    { name: "Abraham King'oo", role: "Organizer",      initials: "AK", bio: "Software Engineer. Passionate about Ruby and building developer communities in East Africa.",  github: "abrakingoo" },
+    { name: "Paul Oguda",      role: "Community Lead", initials: "PO", bio: "Senior Ruby Engineer. Passionate about Ruby, Rails, and mentoring developers.",               github: "kamalogudah" },
+    { name: "John Odhiambo",   role: "Organizer",      initials: "JO", bio: "Software Engineer. Passionate about communities.",                                              github: "johneliud" },
   ].freeze
 
   def self.call(r)
