@@ -3,7 +3,10 @@
   <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:48px_48px] opacity-40" aria-hidden="true"></div>
   <div class="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-10">
     <div class="flex items-center gap-4">
-      <a href="/admin/events" class="text-sm text-foreground-muted hover:text-foreground">← Back</a>
+      <a href="/admin/events" class="inline-flex items-center gap-1.5 text-sm text-foreground-muted hover:text-foreground transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
+        Back
+      </a>
       <h1 class="text-2xl font-bold text-foreground font-mono"><%= event ? "Edit Event" : "New Event" %></h1>
     </div>
   </div>
@@ -20,7 +23,7 @@
   <% end %>
 
   <form action="<%= event ? "/admin/events/#{event.id}" : "/admin/events" %>" method="post">
-    <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-16">
 
       <!-- Left: main fields -->
       <div class="lg:col-span-2 space-y-5">
@@ -46,7 +49,7 @@
 
         <div>
           <label class="block text-sm font-medium text-foreground mb-1.5">Location</label>
-          <input type="text" name="location" value="<%= event&.location %>" placeholder="e.g. iHub Kisumu, or leave blank for virtual"
+          <input type="text" name="location" value="<%= event&.location %>" placeholder="e.g. Zone01 Kisumu, or leave blank for virtual"
             class="w-full rounded-lg border border-border bg-bg px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
         </div>
 
@@ -117,7 +120,7 @@
         </div>
 
         <div class="flex flex-col gap-3">
-          <button type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors">
+          <button type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors cursor-pointer">
             <%= event ? "Save Changes" : "Create Event" %>
           </button>
           <a href="/admin/events" class="w-full inline-flex items-center justify-center rounded-xl border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors">Cancel</a>
