@@ -72,6 +72,53 @@
     })();
   </script>
 
+  <!-- Confirm modal -->
+  <div id="confirm-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="confirm-backdrop"></div>
+    <div class="relative bg-bg rounded-2xl border border-border shadow-2xl p-6 w-[75vw] lg:w-[50vw] space-y-4">
+      <h2 class="text-base font-semibold text-foreground font-mono" id="confirm-title">Are you sure?</h2>
+      <p class="text-sm text-foreground-muted" id="confirm-message"></p>
+      <div class="flex gap-3 justify-end pt-1">
+        <button id="confirm-cancel" type="button"
+          class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors cursor-pointer">
+          Cancel
+        </button>
+        <button id="confirm-ok" type="button"
+          class="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 transition-colors cursor-pointer">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.__confirm = (function () {
+      var modal    = document.getElementById('confirm-modal');
+      var message  = document.getElementById('confirm-message');
+      var btnOk    = document.getElementById('confirm-ok');
+      var btnCancel= document.getElementById('confirm-cancel');
+      var backdrop = document.getElementById('confirm-backdrop');
+      var _resolve;
+
+      function close() { modal.classList.add('hidden'); }
+
+      [btnCancel, backdrop].forEach(function (el) {
+        el.addEventListener('click', function () { close(); _resolve && _resolve(false); });
+      });
+      btnOk.addEventListener('click', function () { close(); _resolve && _resolve(true); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) { close(); _resolve && _resolve(false); }
+      });
+
+      return function (msg) {
+        message.textContent = msg || 'This action cannot be undone.';
+        modal.classList.remove('hidden');
+        btnOk.focus();
+        return new Promise(function (resolve) { _resolve = resolve; });
+      };
+    })();
+  </script>
+
   <%= render("partials/footer") %>
 
 </body>
