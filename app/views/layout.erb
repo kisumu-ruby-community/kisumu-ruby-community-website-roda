@@ -16,6 +16,14 @@
   />
 
   <link href="/style.css" rel="stylesheet" />
+  <!-- Prevent flash of wrong theme -->
+  <script>
+    (function () {
+      var theme = localStorage.getItem('theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+    })();
+  </script>
 </head>
 
 <body class="bg-bg text-foreground min-h-screen flex flex-col">
@@ -116,6 +124,32 @@
         btnOk.focus();
         return new Promise(function (resolve) { _resolve = resolve; });
       };
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var btn     = document.getElementById('theme-toggle');
+      var iconSun = document.getElementById('icon-sun');
+      var iconMoon= document.getElementById('icon-moon');
+
+      function applyTheme(dark) {
+        document.documentElement.classList.toggle('dark', dark);
+        iconSun.classList.toggle('hidden', !dark);
+        iconMoon.classList.toggle('hidden', dark);
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+      }
+
+      // Sync icon with current state on load
+      applyTheme(document.documentElement.classList.contains('dark'));
+
+      btn.addEventListener('click', function () {
+        document.documentElement.classList.add('theme-transitioning');
+        applyTheme(!document.documentElement.classList.contains('dark'));
+        setTimeout(function () {
+          document.documentElement.classList.remove('theme-transitioning');
+        }, 300);
+      });
     })();
   </script>
 
