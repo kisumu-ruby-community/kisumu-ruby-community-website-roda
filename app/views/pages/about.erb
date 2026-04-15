@@ -57,14 +57,16 @@
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <% organizers.each do |person| %>
         <div class="rounded-xl border border-border bg-bg p-6 flex flex-col gap-4">
-          <div class="h-14 w-14 rounded-full bg-primary-muted flex items-center justify-center text-primary font-bold text-lg" aria-hidden="true">
-            <%= person[:initials] %>
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="font-semibold text-foreground"><%= person[:name] %></p>
+              <p class="text-sm text-primary"><%= person[:role] %></p>
+            </div>
+            <div class="h-14 w-14 shrink-0 rounded-full bg-primary-muted flex items-center justify-center text-primary font-bold text-lg" aria-hidden="true">
+              <%= person[:initials] %>
+            </div>
           </div>
-          <div>
-            <p class="font-semibold text-foreground"><%= person[:name] %></p>
-            <p class="text-sm text-primary"><%= person[:role] %></p>
-          </div>
-          <p class="text-sm leading-relaxed text-foreground-muted flex-1"><%= person[:bio] %></p>
+          <p class="text-sm leading-relaxed text-foreground-muted"><%= person[:bio] %></p>
           <% if person[:github] || person[:linkedin] || person[:twitter] %>
             <div class="flex gap-3">
               <% if person[:github] %>
