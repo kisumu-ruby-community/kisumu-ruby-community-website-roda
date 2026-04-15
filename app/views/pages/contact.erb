@@ -1,2 +1,250 @@
-<h2>Welcome to our <%= title %> !</h2>
-<p> <%= description %> </p>
+<!-- Page header -->
+<section class="relative overflow-hidden bg-bg border-b border-border">
+  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:48px_48px] opacity-40" aria-hidden="true"></div>
+  <div class="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-14 sm:py-18">
+    <h1 class="text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl font-mono">Contact &amp; Join</h1>
+    <p class="mt-4 text-lg text-foreground-muted">Join the community, send us a message, or propose a talk. The community would love to hear from you.</p>
+  </div>
+</section>
+
+<div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-14 sm:py-18">
+  <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
+
+    <!-- Left column -->
+    <div class="space-y-12">
+
+      <!-- Community join links -->
+      <div>
+        <h2 class="text-xl font-bold text-foreground mb-6 font-mono">Join the Community</h2>
+        <div class="flex flex-col gap-3">
+          <a href="https://chat.whatsapp.com/GpNl9qryNzPCzNLnLWyfBP" target="_blank" rel="noopener noreferrer"
+             class="flex items-center justify-between rounded-xl px-5 py-4 text-white bg-green-600 hover:bg-green-700 transition-colors duration-150">
+            <div>
+              <p class="font-semibold text-sm">WhatsApp</p>
+              <p class="text-xs opacity-80 mt-0.5">Join our WhatsApp channel</p>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6m0 0v6m0-6L10 14"/></svg>
+          </a>
+          <a href="https://discord.gg/gA49HjpwC" target="_blank" rel="noopener noreferrer"
+             class="flex items-center justify-between rounded-xl px-5 py-4 text-white transition-colors duration-150" style="background:#5865F2">
+            <div>
+              <p class="font-semibold text-sm">Discord</p>
+              <p class="text-xs opacity-80 mt-0.5">Join our Discord server</p>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6m0 0v6m0-6L10 14"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Contact form -->
+      <div>
+        <h2 class="text-xl font-bold text-foreground mb-6 font-mono">Send a Message</h2>
+        <form id="contact-form" novalidate class="space-y-4">
+          <input type="hidden" name="_form" value="contact" />
+
+          <div>
+            <label for="contact-name" class="block text-sm font-medium text-foreground mb-1.5">Name <span class="text-primary" aria-hidden="true">*</span></label>
+            <input id="contact-name" type="text" name="name" autocomplete="name" placeholder="Your name"
+              class="w-full rounded-lg border border-border bg-bg px-3.5 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors" />
+            <p id="contact-name-error" role="alert" class="mt-1.5 text-xs text-red-600 hidden"></p>
+          </div>
+
+          <div>
+            <label for="contact-email" class="block text-sm font-medium text-foreground mb-1.5">Email <span class="text-primary" aria-hidden="true">*</span></label>
+            <input id="contact-email" type="email" name="email" autocomplete="email" placeholder="you@example.com"
+              class="w-full rounded-lg border border-border bg-bg px-3.5 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors" />
+            <p id="contact-email-error" role="alert" class="mt-1.5 text-xs text-red-600 hidden"></p>
+          </div>
+
+          <div>
+            <label for="contact-message" class="block text-sm font-medium text-foreground mb-1.5">Message <span class="text-primary" aria-hidden="true">*</span></label>
+            <textarea id="contact-message" name="message" rows="4" placeholder="What's on your mind?"
+              class="w-full rounded-lg border border-border bg-bg px-3.5 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors resize-none"></textarea>
+            <p id="contact-message-error" role="alert" class="mt-1.5 text-xs text-red-600 hidden"></p>
+          </div>
+
+          <button type="submit" disabled id="contact-submit" class="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover active:bg-primary-active transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+            Send Message
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right column: Talk proposal -->
+    <div>
+      <h2 class="text-xl font-bold text-foreground mb-2 font-mono">Propose a Talk</h2>
+      <p class="text-sm text-foreground-muted mb-6">Got something to share with the community? We welcome talks, workshops, and lightning sessions on Ruby, Rails, and anything in the ecosystem.</p>
+
+      <form id="proposal-form" novalidate class="space-y-4">
+        <input type="hidden" name="_form" value="proposal" />
+
+        <div>
+          <label for="proposal-name" class="block text-sm font-medium text-foreground mb-1.5">Name <span class="text-primary" aria-hidden="true">*</span></label>
+          <input id="proposal-name" type="text" name="name" autocomplete="name" placeholder="Your name"
+            class="w-full rounded-lg border border-border bg-bg px-3.5 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors" />
+          <p id="proposal-name-error" role="alert" class="mt-1.5 text-xs text-red-600 hidden"></p>
+        </div>
+
+        <div>
+          <label for="proposal-email" class="block text-sm font-medium text-foreground mb-1.5">Email <span class="text-primary" aria-hidden="true">*</span></label>
+          <input id="proposal-email" type="email" name="email" autocomplete="email" placeholder="you@example.com"
+            class="w-full rounded-lg border border-border bg-bg px-3.5 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors" />
+          <p id="proposal-email-error" role="alert" class="mt-1.5 text-xs text-red-600 hidden"></p>
+        </div>
+
+        <div>
+          <label for="proposal-topic" class="block text-sm font-medium text-foreground mb-1.5">Talk Topic <span class="text-primary" aria-hidden="true">*</span></label>
+          <input id="proposal-topic" type="text" name="topic" placeholder="e.g. Building APIs with Rails 8"
+            class="w-full rounded-lg border border-border bg-bg px-3.5 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors" />
+          <p id="proposal-topic-error" role="alert" class="mt-1.5 text-xs text-red-600 hidden"></p>
+        </div>
+
+        <div>
+          <label for="proposal-format" class="block text-sm font-medium text-foreground mb-1.5">Format <span class="text-primary" aria-hidden="true">*</span></label>
+          <select id="proposal-format" name="format"
+            class="w-full rounded-lg border border-border bg-bg px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors cursor-pointer">
+            <option value="">Select a format</option>
+            <option>Lightning Talk (5–10 min)</option>
+            <option>Full Talk (30 min)</option>
+            <option>Workshop (60–90 min)</option>
+            <option>Panel Discussion</option>
+          </select>
+          <p id="proposal-format-error" role="alert" class="mt-1.5 text-xs text-red-600 hidden"></p>
+        </div>
+
+        <div>
+          <label for="proposal-description" class="block text-sm font-medium text-foreground mb-1.5">Description <span class="text-primary" aria-hidden="true">*</span></label>
+          <textarea id="proposal-description" name="description" rows="4" placeholder="Brief description of what you'd like to cover and who it's for…"
+            class="w-full rounded-lg border border-border bg-bg px-3.5 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors resize-none"></textarea>
+          <p id="proposal-description-error" role="alert" class="mt-1.5 text-xs text-red-600 hidden"></p>
+        </div>
+
+        <button type="submit" disabled id="proposal-submit" class="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover active:bg-primary-active transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Submit Proposal
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function setError(id, msg) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = msg || '';
+    el.classList.toggle('hidden', !msg);
+    var input = document.getElementById(id.replace('-error', ''));
+    if (input) input.classList.toggle('border-red-500', !!msg);
+  }
+
+  function validateContact(f) {
+    var e = {};
+    if (!f.name.trim()) e.name = 'Name is required.';
+    else if (f.name.trim().length < 3) e.name = 'Name must be at least 3 characters.';
+    if (!f.email.trim()) e.email = 'Email is required.';
+    else if (!EMAIL_RE.test(f.email)) e.email = 'Enter a valid email address.';
+    if (!f.message.trim()) e.message = 'Message is required.';
+    else if (f.message.trim().length < 10) e.message = 'Message must be at least 10 characters.';
+    return e;
+  }
+
+  function validateProposal(f) {
+    var e = {};
+    if (!f.name.trim()) e.name = 'Name is required.';
+    else if (f.name.trim().length < 3) e.name = 'Name must be at least 3 characters.';
+    if (!f.email.trim()) e.email = 'Email is required.';
+    else if (!EMAIL_RE.test(f.email)) e.email = 'Enter a valid email address.';
+    if (!f.topic.trim()) e.topic = 'Topic is required.';
+    else if (f.topic.trim().length < 10) e.topic = 'Topic must be at least 10 characters.';
+    if (!f.description.trim()) e.description = 'Description is required.';
+    else if (f.description.trim().length < 10) e.description = 'Description must be at least 10 characters.';
+    if (!f.format) e.format = 'Select a format.';
+    return e;
+  }
+
+  function submitForm(form, btn, successMsg, resetFields) {
+    btn.disabled = true;
+    fetch('/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)).toString()
+    })
+    .then(function (res) {
+      if (res.ok || res.redirected) {
+        window.__toast.success(successMsg);
+        resetFields.forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+      } else {
+        window.__toast.error('Something went wrong. Please try again.');
+      }
+    })
+    .catch(function () { window.__toast.error('Something went wrong. Please try again.'); })
+    .finally(function () { btn.disabled = false; });
+  }
+
+  // Contact form
+  var cf = document.getElementById('contact-form');
+  if (cf) {
+    var cBtn = document.getElementById('contact-submit');
+    function checkContact() {
+      var f = { name: cf.name.value, email: cf.email.value, message: cf.message.value };
+      cBtn.disabled = Object.keys(validateContact(f)).length > 0;
+    }
+    ['name', 'email', 'message'].forEach(function (field) {
+      var el = document.getElementById('contact-' + field);
+      el.addEventListener('blur', function () {
+        var f = { name: cf.name.value, email: cf.email.value, message: cf.message.value };
+        setError('contact-' + field + '-error', validateContact(f)[field] || '');
+      });
+      el.addEventListener('input', checkContact);
+    });
+    cf.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var f = { name: cf.name.value, email: cf.email.value, message: cf.message.value };
+      var errs = validateContact(f);
+      ['name', 'email', 'message'].forEach(function (k) { setError('contact-' + k + '-error', errs[k] || ''); });
+      if (Object.keys(errs).length) return;
+      submitForm(cf, cBtn, "Message sent! We'll get back to you soon.", ['contact-name', 'contact-email', 'contact-message']);
+    });
+  }
+
+  // Proposal form
+  var pf = document.getElementById('proposal-form');
+  if (pf) {
+    var pBtn = document.getElementById('proposal-submit');
+    function checkProposal() {
+      var f = { name: pf.name.value, email: pf.email.value, topic: pf.topic.value, description: pf.description.value, format: pf.format.value };
+      pBtn.disabled = Object.keys(validateProposal(f)).length > 0;
+    }
+    ['name', 'email', 'topic', 'description'].forEach(function (field) {
+      var el = document.getElementById('proposal-' + field);
+      el.addEventListener('blur', function () {
+        var f = { name: pf.name.value, email: pf.email.value, topic: pf.topic.value, description: pf.description.value, format: pf.format.value };
+        setError('proposal-' + field + '-error', validateProposal(f)[field] || '');
+      });
+      el.addEventListener('input', checkProposal);
+    });
+    document.getElementById('proposal-format').addEventListener('change', function () {
+      var f = { name: pf.name.value, email: pf.email.value, topic: pf.topic.value, description: pf.description.value, format: pf.format.value };
+      setError('proposal-format-error', validateProposal(f)['format'] || '');
+      checkProposal();
+    });
+    pf.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var f = { name: pf.name.value, email: pf.email.value, topic: pf.topic.value, description: pf.description.value, format: pf.format.value };
+      var errs = validateProposal(f);
+      ['name', 'email', 'topic', 'format', 'description'].forEach(function (k) { setError('proposal-' + k + '-error', errs[k] || ''); });
+      if (Object.keys(errs).length) return;
+      submitForm(pf, pBtn, "Proposal submitted! We'll be in touch.", ['proposal-name', 'proposal-email', 'proposal-topic', 'proposal-description', 'proposal-format']);
+    });
+  }
+})();
+</script>
