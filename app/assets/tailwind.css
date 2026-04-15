@@ -244,3 +244,11 @@ samp {
   to   { opacity: 1; transform: translateX(0); }
 }
 .toast { animation: toast-in 0.2s ease-out forwards; }
+
+/* ── Theme transition ── */
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: background-color 300ms ease, border-color 300ms ease, color 200ms ease !important;
+}
