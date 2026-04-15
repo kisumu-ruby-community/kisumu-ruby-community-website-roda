@@ -30,7 +30,7 @@
             <a href="/admin/events" class="hidden lg:inline-flex items-center rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors duration-150">Admin</a>
           <% end %>
           <form action="/logout" method="post" class="hidden lg:block">
-            <button type="submit" class="inline-flex items-center rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors duration-150">
+            <button type="submit" class="inline-flex items-center rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors duration-150 cursor-pointer">
               <img src="<%= current_user.avatar_url %>" class="h-5 w-5 rounded-full mr-2" alt="" />
               Sign out
             </button>
