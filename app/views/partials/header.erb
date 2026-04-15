@@ -8,7 +8,7 @@
 
       <!-- Logo -->
       <a href="/" class="flex items-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary" aria-label="Kisumu Ruby Community - Go to homepage">
-        <img src="assets/logo/KRC-1.png" alt="Kisumu Ruby Community" class="h-14 w-auto" />
+        <img src="/assets/logo/KRC-1.png" alt="Kisumu Ruby Community" class="h-14 w-auto" />
       </a>
 
       <!-- Desktop nav -->
@@ -34,7 +34,7 @@
           <form action="/logout" method="post" class="hidden lg:block">
             <button type="submit" class="inline-flex items-center rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors duration-150 cursor-pointer">
               <img src="<%= current_user.avatar_url %>" class="h-5 w-5 rounded-full mr-2" alt="" />
-              Sign out
+              Sign Out
             </button>
           </form>
         <% else %>
@@ -88,7 +88,7 @@
         <form action="/logout" method="post">
           <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors duration-150">
             <img src="<%= current_user.avatar_url %>" class="h-5 w-5 rounded-full" alt="" />
-            Sign out
+            Sign Out
           </button>
         </form>
       <% else %>
