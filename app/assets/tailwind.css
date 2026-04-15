@@ -210,3 +210,30 @@ samp {
   color: var(--color-primary) !important;
   background-color: var(--color-primary-subtle) !important;
 }
+
+/* ── Skip to content (accessibility) ── */
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-to-content:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border-radius: 0.375rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  z-index: 9999;
+  outline: 2px solid var(--color-primary-foreground);
+  outline-offset: 2px;
+}
