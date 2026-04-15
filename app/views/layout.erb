@@ -28,6 +28,50 @@
     <%= yield %>
   </main>
 
+  <!-- Toast notification -->
+  <div id="toast" role="alert" aria-live="assertive"
+    class="toast hidden fixed right-4 top-[4.5rem] z-[70] flex max-w-[50%] items-start gap-3 rounded-lg border px-4 py-3 shadow-lg sm:max-w-xs">
+    <svg id="toast-icon-success" xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+    <svg id="toast-icon-error" xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-4 w-4 shrink-0 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+    <p id="toast-message" class="flex-1 text-sm font-medium leading-snug"></p>
+    <button type="button" id="toast-dismiss" aria-label="Dismiss notification"
+      class="shrink-0 rounded p-0.5 opacity-60 transition-opacity duration-150 hover:opacity-100 cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <script>
+    window.__toast = (function () {
+      var el      = document.getElementById('toast');
+      var msg     = document.getElementById('toast-message');
+      var iconOk  = document.getElementById('toast-icon-success');
+      var iconErr = document.getElementById('toast-icon-error');
+      var timer   = null;
+
+      document.getElementById('toast-dismiss').addEventListener('click', dismiss);
+
+      function dismiss() {
+        el.classList.add('hidden');
+        if (timer) { clearTimeout(timer); timer = null; }
+      }
+
+      function show(type, message, duration) {
+        if (timer) clearTimeout(timer);
+        var isSuccess = type === 'success';
+        msg.textContent = message;
+        el.className = 'toast fixed right-4 top-[4.5rem] z-[70] flex max-w-[50%] items-start gap-3 rounded-lg border px-4 py-3 shadow-lg sm:max-w-xs ' +
+          (isSuccess
+            ? 'border-[var(--color-success-border)] bg-[var(--color-success-bg)] text-[var(--color-success-foreground)]'
+            : 'border-[var(--color-error-border)] bg-[var(--color-error-bg)] text-[var(--color-error-foreground)]');
+        iconOk.classList.toggle('hidden', !isSuccess);
+        iconErr.classList.toggle('hidden', isSuccess);
+        timer = setTimeout(dismiss, duration || 3000);
+      }
+
+      return { success: function(m) { show('success', m); }, error: function(m) { show('error', m); } };
+    })();
+  </script>
+
   <%= render("partials/footer") %>
 
 </body>
