@@ -19,7 +19,8 @@ class App < Roda
             view("pages/about", locals: Routes::AboutRoute.call(r))
         end
         r.on "contact" do
-            view("pages/contact", locals: Routes::ContactRoute.call(r))
+            r.get  { view("pages/contact", locals: { title: "Contact & Join" }) }
+            r.post { Routes::ContactRoute.call(r) }
         end
         r.on "join" do
             view("pages/join", locals: Routes::JoinRoute.call(r))
