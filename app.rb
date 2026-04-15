@@ -2,6 +2,7 @@ require "roda"
 require_relative "app/routes/home"
 require_relative "app/routes/about"
 require_relative "app/routes/contact"
+require_relative "app/routes/join"
 
 class App < Roda
     plugin :render, views: "app/views"
@@ -19,6 +20,9 @@ class App < Roda
         end
         r.on "contact" do
             view("pages/contact", locals: Routes::ContactRoute.call(r))
+        end
+        r.on "join" do
+            view("pages/join", locals: Routes::JoinRoute.call(r))
         end
     end
 end
