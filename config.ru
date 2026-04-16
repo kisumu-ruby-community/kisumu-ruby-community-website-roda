@@ -12,6 +12,7 @@ Sentry.init do |config|
   config.environment      = ENV.fetch("RACK_ENV", "development")
   config.enabled_environments = %w[production staging]
   config.traces_sample_rate = 0.2
+  config.send_default_pii = true
 end
 
 # Structured request logger
