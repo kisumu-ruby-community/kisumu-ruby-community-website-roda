@@ -120,7 +120,7 @@
         </div>
 
         <div class="flex flex-col gap-3">
-          <button type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors cursor-pointer">
+          <button type="submit" data-loading="Saving..." class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors cursor-pointer">
             <%= event ? "Save Changes" : "Create Event" %>
           </button>
           <a href="/admin/events" class="w-full inline-flex items-center justify-center rounded-xl border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors">Cancel</a>

@@ -178,6 +178,14 @@ samp {
   font-family: "Space Mono", "JetBrains Mono", ui-monospace, monospace;
 }
 
+a, button {
+	cursor: pointer;
+}
+
+button:disabled {
+	cursor: not-allowed;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -251,4 +259,11 @@ samp {
 .theme-transitioning *::before,
 .theme-transitioning *::after {
   transition: background-color 300ms ease, border-color 300ms ease, color 200ms ease !important;
+}
+
+/* ── datetime-local calendar icon in dark mode ── */
+.dark input[type="datetime-local"],
+.dark input[type="date"],
+.dark input[type="time"] {
+  color-scheme: dark;
 }
