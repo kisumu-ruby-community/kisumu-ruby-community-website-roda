@@ -1,9 +1,12 @@
+require "cgi"
+
 class User < Sequel::Model
   def admin?  = role == "admin"
   def member? = role == "member" || admin?
 
-  def promote_to_admin
-    update(role: "admin")
+  def welcome_message
+    safe_name = CGI.escapeHTML((name || github_username).to_s.strip)
+    "Welcome, #{safe_name}!"
   end
   def self.from_github(auth)
     user = first(github_id: auth["uid"].to_s) ||
@@ -24,6 +27,8 @@ class User < Sequel::Model
       user = create(attrs)
     end
 
+    admin_usernames = ENV.fetch("ADMIN_GITHUB_USERNAME", "").split(",").map(&:strip)
+    user.promote_to_admin if admin_usernames.include?(user.github_username) && !user.admin?
     user
   end
 end
