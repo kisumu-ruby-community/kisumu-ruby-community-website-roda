@@ -168,8 +168,11 @@
     return e;
   }
 
-  function submitForm(form, btn, successMsg, resetFields) {
+  function submitForm(form, btn, successMsg, resetFields, loadingText) {
+    var original = btn.innerHTML;
+    var spinner  = '<svg class="animate-spin h-4 w-4 inline-block mr-1.5 align-middle" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>';
     btn.disabled = true;
+    btn.innerHTML = spinner + (loadingText || 'Sending\u2026');
     fetch('/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -187,7 +190,7 @@
       }
     })
     .catch(function () { window.__toast.error('Something went wrong. Please try again.'); })
-    .finally(function () { btn.disabled = false; });
+    .finally(function () { btn.disabled = false; btn.innerHTML = original; });
   }
 
   // Contact form
@@ -243,7 +246,7 @@
       var errs = validateProposal(f);
       ['name', 'email', 'topic', 'format', 'description'].forEach(function (k) { setError('proposal-' + k + '-error', errs[k] || ''); });
       if (Object.keys(errs).length) return;
-      submitForm(pf, pBtn, "Proposal submitted! We'll be in touch.", ['proposal-name', 'proposal-email', 'proposal-topic', 'proposal-description', 'proposal-format']);
+      submitForm(pf, pBtn, "Proposal submitted! We'll be in touch.", ['proposal-name', 'proposal-email', 'proposal-topic', 'proposal-description', 'proposal-format'], 'Submitting\u2026');
     });
   }
 })();
