@@ -75,6 +75,11 @@ class App < Roda
     end
 
     # Public pages
+    r.get "health" do
+      response.status = 200
+      "OK #{Time.now.utc.iso8601}"
+    end
+
     r.root { view("pages/index", locals: Routes::HomeRoute.call(r)) }
 
     r.on("about")     { view("pages/about",     locals: Routes::AboutRoute.call(r)) }
