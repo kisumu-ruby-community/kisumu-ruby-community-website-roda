@@ -23,6 +23,7 @@ class App < Roda
   plugin :render, views: "app/views"
   plugin :public
   plugin :all_verbs
+  plugin :halt
 
   use OmniAuth::Builder do
     provider :github,
@@ -60,10 +61,11 @@ class App < Roda
           
           admin_usernames = ENV.fetch("ADMIN_GITHUB_USERNAME", "").split(",").map(&:strip)
           if admin_usernames.include?(user.github_username) && !user.admin?
-            user.update(role: "admin")
+            user.promote_to_admin
           end
           session[:user_id] = user.id
-          session[:flash]   = "Welcome, #{user.name || user.github_username}!"
+          display_name = CGI.escapeHTML((user.name || user.github_username).to_s.strip)
+          session[:flash]   = "Welcome, #{display_name}!"
           r.redirect session.delete(:return_to) || "/"
         end
       end
@@ -93,6 +95,7 @@ class App < Roda
 
     r.on "events" do
       r.on String do |id|
+        halt 400 unless id.match?(/\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i)
         r.post "rsvp" do
           require_login!
           Routes::EventsRoute.rsvp(r, id, current_user)
