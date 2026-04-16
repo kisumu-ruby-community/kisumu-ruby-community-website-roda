@@ -1,0 +1,26 @@
+<% _seo = @seo || {} %>
+<% _title       = _seo[:title]       || "Kisumu Ruby Community" %>
+<% _description = _seo[:description] || "Kisumu's community of Ruby and Rails developers. We learn together, build real things, and grow the tech ecosystem of Western Kenya." %>
+<% _url         = _seo[:url]         || request.url %>
+<% _image       = _seo[:image]       || "/assets/logo/KRC-1.png" %>
+<% _type        = _seo[:type]        || "website" %>
+<% _full_title  = _seo[:title] ? "#{_seo[:title]} · Kisumu Ruby Community" : "Kisumu Ruby Community" %>
+
+<title><%= _full_title %></title>
+<meta name="description" content="<%= _description %>" />
+<link rel="canonical" href="<%= _url %>" />
+
+<!-- Open Graph -->
+<meta property="og:type"        content="<%= _type %>" />
+<meta property="og:title"       content="<%= _full_title %>" />
+<meta property="og:description" content="<%= _description %>" />
+<meta property="og:url"         content="<%= _url %>" />
+<meta property="og:image"       content="<%= _image %>" />
+<meta property="og:site_name"   content="Kisumu Ruby Community" />
+<meta property="og:locale"      content="en_KE" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card"        content="summary_large_image" />
+<meta name="twitter:title"       content="<%= _full_title %>" />
+<meta name="twitter:description" content="<%= _description %>" />
+<meta name="twitter:image"       content="<%= _image %>" />
