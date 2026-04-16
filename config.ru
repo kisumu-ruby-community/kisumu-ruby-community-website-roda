@@ -15,19 +15,23 @@ Sentry.init do |config|
 end
 
 # Structured request logger
-RequestLogger = lambda do |app|
-  lambda do |env|
+class RequestLogger
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
     start  = Time.now
-    status, headers, body = app.call(env)
+    status, headers, body = @app.call(env)
     duration = ((Time.now - start) * 1000).round(2)
     req = Rack::Request.new(env)
     $stdout.puts JSON.generate(
-      time:    Time.now.utc.iso8601,
-      method:  req.request_method,
-      path:    req.path,
-      status:  status,
+      time:        Time.now.utc.iso8601,
+      method:      req.request_method,
+      path:        req.path,
+      status:      status,
       duration_ms: duration,
-      ip:      req.ip
+      ip:          req.ip
     )
     $stdout.flush
     [status, headers, body]
