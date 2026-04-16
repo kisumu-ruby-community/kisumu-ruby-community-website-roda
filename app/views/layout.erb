@@ -106,18 +106,21 @@
   <% end %>
 
   <script>
-    // Loading state for any button: data-loading="Loading..." on the element
-    document.addEventListener('click', function (e) {
-      var btn = e.target.closest('button[data-loading], a[data-loading]');
-      if (!btn || btn.disabled) return;
-      var original = btn.innerHTML;
-      var msg      = btn.dataset.loading;
-      btn.disabled = true;
-      btn.innerHTML = msg;
-      // Restore if navigation doesn't happen (e.g. validation blocked form)
+    // Submit buttons: apply on form submit so button is still enabled when form fires
+    document.addEventListener('submit', function (e) {
+      var btn = e.target.querySelector('button[data-loading][type="submit"]');
+      if (!btn) return;
       setTimeout(function () {
-        if (document.body.contains(btn)) { btn.disabled = false; btn.innerHTML = original; }
-      }, 8000);
+        btn.innerHTML = btn.dataset.loading;
+        btn.disabled  = true;
+      }, 0);
+    });
+
+    // Anchor tags (sign in links)
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[data-loading]');
+      if (!a) return;
+      a.innerHTML = a.dataset.loading;
     });
   </script>
 
