@@ -5,8 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="icon" type="image/png" href="/assets/logo/KRC-1.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#cc0000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="/assets/logo/KRC-1.png" />
 
-  <title>Kisumu Ruby Community</title>
+  <%= render("partials/seo") %>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -230,6 +235,12 @@
   </script>
 
   <%= render("partials/footer") %>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
 
 </body>
 </html>

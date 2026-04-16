@@ -1,0 +1,17 @@
+{
+  "name": "Kisumu Ruby Community",
+  "short_name": "KRC",
+  "description": "The official website for the Kisumu Ruby Community",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#cc0000",
+  "icons": [
+    {
+      "src": "/assets/logo/KRC-1.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
