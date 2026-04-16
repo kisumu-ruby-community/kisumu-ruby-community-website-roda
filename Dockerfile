@@ -18,7 +18,7 @@ RUN bundle config set --local without 'development test' && \
 # Install Node deps and compile Tailwind
 COPY package.json package-lock.json ./
 COPY app/assets/tailwind.css app/assets/tailwind.css
-RUN npm ci --omit=dev && \
+RUN npm ci && \
     ./node_modules/.bin/tailwindcss -i ./app/assets/tailwind.css -o ./public/style.css
 
 COPY . .
