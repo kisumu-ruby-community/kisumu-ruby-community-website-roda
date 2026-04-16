@@ -2,6 +2,9 @@ class User < Sequel::Model
   def admin?  = role == "admin"
   def member? = role == "member" || admin?
 
+  def promote_to_admin
+    update(role: "admin")
+  end
   def self.from_github(auth)
     user = first(github_id: auth["uid"].to_s) ||
            first(github_username: auth.dig("info", "nickname"))
