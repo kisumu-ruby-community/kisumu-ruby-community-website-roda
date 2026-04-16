@@ -63,6 +63,7 @@ class App < Roda
             user.update(role: "admin")
           end
           session[:user_id] = user.id
+          session[:flash]   = "Welcome, #{user.name || user.github_username}!"
           r.redirect session.delete(:return_to) || "/"
         end
       end
