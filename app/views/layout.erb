@@ -101,15 +101,14 @@
 
   <% if session[:flash] %>
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        window.__toast && window.__toast.success(<%= session.delete(:flash).to_json %>);
-      });
+      window.__toast && window.__toast.success(<%= session.delete(:flash).to_json %>);
     </script>
   <% end %>
 
   <script>
     window.__confirm = (function () {
       var modal    = document.getElementById('confirm-modal');
+      var message  = document.getElementById('confirm-message');
       var btnOk    = document.getElementById('confirm-ok');
       var btnCancel= document.getElementById('confirm-cancel');
       var backdrop = document.getElementById('confirm-backdrop');
