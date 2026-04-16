@@ -18,21 +18,21 @@ module Routes
           r.get { app.view("pages/admin/events/form", locals: { event: nil, errors: {} }) }
         end
 
-        r.on String do |id|
-          halt 400 unless id.match?(/\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i)
-          event = EventsAdminService.find(id)
+        r.on String do |raw_id|
+          uuid = raw_id.match?(/\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i) ? raw_id : halt(400)
+          event = EventsAdminService.find(uuid)
 
           r.on "edit" do
             r.get { app.view("pages/admin/events/form", locals: { event: event, errors: {} }) }
           end
 
           r.post "delete" do
-            EventsAdminService.delete(id)
+            EventsAdminService.delete(uuid)
             r.redirect "/admin/events"
           end
 
           r.post do
-            errors = EventsAdminService.update(id, r.params)
+            errors = EventsAdminService.update(uuid, r.params)
             if errors.empty?
               r.redirect "/admin/events"
             else
