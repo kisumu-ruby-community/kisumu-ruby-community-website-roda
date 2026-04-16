@@ -63,6 +63,7 @@ class App < Roda
             user.update(role: "admin")
           end
           session[:user_id] = user.id
+          session[:flash]   = "Welcome, #{user.name || user.github_username}!"
           r.redirect session.delete(:return_to) || "/"
         end
       end
@@ -92,10 +93,12 @@ class App < Roda
           Routes::EventsRoute.rsvp(r, id, current_user)
           r.redirect "/events/#{id}"
         end
-        r.post "rsvp/cancel" do
-          require_login!
-          Routes::EventsRoute.cancel_rsvp(r, id, current_user)
-          r.redirect "/events/#{id}"
+        r.on "rsvp" do
+          r.post "cancel" do
+            require_login!
+            Routes::EventsRoute.cancel_rsvp(r, id, current_user)
+            r.redirect "/events/#{id}"
+          end
         end
         view("pages/events/show", locals: Routes::EventsRoute.show(r, id, current_user))
       end
