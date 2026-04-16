@@ -24,6 +24,16 @@ class App < Roda
   plugin :public
   plugin :all_verbs
   plugin :halt
+  plugin :error_handler
+  plugin :not_found
+
+  not_found { view("pages/404") }
+
+  error do |e|
+    Sentry.capture_exception(e) if defined?(Sentry)
+    response.status = 500
+    view("pages/500")
+  end
 
   use OmniAuth::Builder do
     provider :github,
@@ -46,7 +56,7 @@ class App < Roda
 
   def require_admin!
     require_login!
-    request.redirect "/" unless current_user&.admin?
+    halt 404 unless current_user&.admin?
   end
 
   route do |r|
