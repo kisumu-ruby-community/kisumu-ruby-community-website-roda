@@ -15,15 +15,22 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle config set --local without 'development test' && \
     bundle install --jobs 4 --retry 3
 
-# Install Node deps and compile Tailwind
+# Install Node deps first
 COPY package.json package-lock.json ./
-COPY app/assets/tailwind.css app/assets/tailwind.css
-RUN npm ci && \
-    ./node_modules/.bin/tailwindcss -i ./app/assets/tailwind.css -o ./public/style.css
 
+# Make sure optional native deps are included
+ENV npm_config_include=optional=true
+
+RUN npm ci
+
+# Copy only the files needed for Tailwind build
+COPY app/assets/tailwind.css app/assets/tailwind.css
 COPY . .
 
-# Remove Node deps after build (not needed at runtime)
+# Build Tailwind using the current CLI package entrypoint
+RUN npx @tailwindcss/cli -i ./app/assets/tailwind.css -o ./public/style.css
+
+# Remove Node deps after build
 RUN rm -rf node_modules
 
 EXPOSE 9292
