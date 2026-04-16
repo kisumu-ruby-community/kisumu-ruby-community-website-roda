@@ -90,13 +90,13 @@
         <% if user_rsvpd %>
           <p class="text-sm text-success-foreground font-medium">You're going!</p>
           <form action="/events/<%= event.id %>/rsvp/cancel" method="post">
-            <button type="submit" class="w-full rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors cursor-pointer">
+            <button type="submit" data-loading="Cancelling..." class="w-full rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors cursor-pointer">
               Cancel RSVP
             </button>
           </form>
         <% elsif defined?(current_user) && current_user %>
           <form action="/events/<%= event.id %>/rsvp" method="post">
-            <button type="submit" class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors cursor-pointer">
+            <button type="submit" data-loading="Saving your RSVP..." class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors cursor-pointer">
               RSVP - I'm going
             </button>
           </form>
