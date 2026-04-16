@@ -12,7 +12,8 @@ WORKDIR /app
 
 # Install Ruby gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install --without development test
+RUN bundle config set --local without 'development test' && \
+    bundle install --jobs 4 --retry 3
 
 # Install Node deps and compile Tailwind
 COPY package.json package-lock.json ./
