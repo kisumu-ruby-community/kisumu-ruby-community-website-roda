@@ -2,7 +2,6 @@ require "dotenv/load"
 require "roda"
 require "omniauth"
 require "omniauth-github"
-require "cgi"
 require_relative "config/database"
 require_relative "app/models/user"
 require_relative "app/models/event"
@@ -23,6 +22,17 @@ class App < Roda
   plugin :render, views: "app/views"
   plugin :public
   plugin :all_verbs
+  plugin :halt
+  plugin :error_handler
+  plugin :not_found
+
+  not_found { view("pages/404") }
+
+  error do |e|
+    Sentry.capture_exception(e) if defined?(Sentry)
+    response.status = 500
+    view("pages/500")
+  end
 
   use OmniAuth::Builder do
     provider :github,
@@ -45,7 +55,7 @@ class App < Roda
 
   def require_admin!
     require_login!
-    request.redirect "/" unless current_user&.admin?
+    halt 404 unless current_user&.admin?
   end
 
   route do |r|
@@ -57,13 +67,8 @@ class App < Roda
         r.on "callback" do
           auth = request.env["omniauth.auth"]
           user = User.from_github(auth)
-          
-          admin_usernames = ENV.fetch("ADMIN_GITHUB_USERNAME", "").split(",").map(&:strip)
-          if admin_usernames.include?(user.github_username) && !user.admin?
-            user.update(role: "admin")
-          end
           session[:user_id] = user.id
-          session[:flash]   = "Welcome, #{user.name || user.github_username}!"
+          session[:flash]   = user.welcome_message
           r.redirect session.delete(:return_to) || "/"
         end
       end
@@ -93,6 +98,7 @@ class App < Roda
 
     r.on "events" do
       r.on String do |id|
+        halt 400 unless id.match?(/\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i)
         r.post "rsvp" do
           require_login!
           Routes::EventsRoute.rsvp(r, id, current_user)

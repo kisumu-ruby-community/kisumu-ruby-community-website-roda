@@ -1,7 +1,14 @@
 require_relative "../services/admin/events_admin_service"
 
+UUID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i
+
 module Routes
   class AdminRoute
+    def self.validate_uuid(raw)
+      raise ArgumentError, "invalid id" unless raw.is_a?(String) && raw.match?(UUID_FORMAT)
+      raw.downcase.freeze
+    end
+
     def self.call(r, app)
       r.is { r.redirect "/admin/events" }
 
@@ -18,7 +25,13 @@ module Routes
           r.get { app.view("pages/admin/events/form", locals: { event: nil, errors: {} }) }
         end
 
-        r.on String do |id|
+        r.on String do |raw_id|
+          begin
+            id = validate_uuid(raw_id)
+          rescue ArgumentError
+            r.halt 400
+          end
+
           event = EventsAdminService.find(id)
 
           r.on "edit" do
