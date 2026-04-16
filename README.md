@@ -182,7 +182,7 @@ cp .env.example .env
 | `GITHUB_CLIENT_ID` | GitHub OAuth App client ID |
 | `GITHUB_CLIENT_SECRET` | GitHub OAuth App client secret |
 | `ADMIN_GITHUB_USERNAME` | Comma-separated GitHub usernames to seed as admins (e.g. `alice,bob`) |
-| `SESSION_SECRET` | Random secret for cookie sessions — minimum 64 characters |
+| `SESSION_SECRET` | Random secret for cookie sessions - minimum 64 characters |
 
 **GitHub OAuth App setup:**
 1. Go to https://github.com/settings/developers → New OAuth App
