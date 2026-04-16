@@ -94,12 +94,17 @@
               Cancel RSVP
             </button>
           </form>
-        <% else %>
+        <% elsif defined?(current_user) && current_user %>
           <form action="/events/<%= event.id %>/rsvp" method="post">
             <button type="submit" class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors cursor-pointer">
               RSVP - I'm going
             </button>
           </form>
+        <% else %>
+          <button type="button" onclick="window.__signin('Sign in to RSVP for this event.')"
+            class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors cursor-pointer">
+            RSVP - I'm going
+          </button>
         <% end %>
       </div>
 
