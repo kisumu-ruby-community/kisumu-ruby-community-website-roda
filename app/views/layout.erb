@@ -1,17 +1,233 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="icon" type="image/png" href="/assets/logo/KRC-1.png" />
+
   <title>Kisumu Ruby Community</title>
-  <link href="/style.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link href="/style.css" rel="stylesheet" />
+  <!-- Prevent flash of wrong theme -->
+  <script>
+    (function () {
+      var theme = localStorage.getItem('theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'dark');
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+    })();
+  </script>
 </head>
 
-<body class="bg-gray-100 text-gray-900 pt-16 min-h-screen flex flex-col">
+<body class="bg-bg text-foreground min-h-screen flex flex-col">
 
-  <%= render("partials/header") %>
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
-  <main class="p-6 flex-1">
+  <%= render("partials/header", locals: { current_user: current_user }) %>
+
+  <main id="main-content" tabindex="-1" class="flex-1 pt-16">
     <%= yield %>
   </main>
+
+  <!-- Toast notification -->
+  <div id="toast" role="alert" aria-live="assertive"
+    class="toast hidden fixed right-4 top-[4.5rem] z-[70] flex max-w-[50%] items-start gap-3 rounded-lg border px-4 py-3 shadow-lg sm:max-w-xs">
+    <svg id="toast-icon-success" xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+    <svg id="toast-icon-error" xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-4 w-4 shrink-0 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+    <p id="toast-message" class="flex-1 text-sm font-medium leading-snug"></p>
+    <button type="button" id="toast-dismiss" aria-label="Dismiss notification"
+      class="shrink-0 rounded p-0.5 opacity-60 transition-opacity duration-150 hover:opacity-100 cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <script>
+    window.__toast = (function () {
+      var el      = document.getElementById('toast');
+      var msg     = document.getElementById('toast-message');
+      var iconOk  = document.getElementById('toast-icon-success');
+      var iconErr = document.getElementById('toast-icon-error');
+      var timer   = null;
+
+      document.getElementById('toast-dismiss').addEventListener('click', dismiss);
+
+      function dismiss() {
+        el.classList.add('hidden');
+        if (timer) { clearTimeout(timer); timer = null; }
+      }
+
+      function show(type, message, duration) {
+        if (timer) clearTimeout(timer);
+        var isSuccess = type === 'success';
+        msg.textContent = message;
+        el.className = 'toast fixed right-4 top-[4.5rem] z-[70] flex max-w-[50%] items-start gap-3 rounded-lg border px-4 py-3 shadow-lg sm:max-w-xs ' +
+          (isSuccess
+            ? 'border-[var(--color-success-border)] bg-[var(--color-success-bg)] text-[var(--color-success-foreground)]'
+            : 'border-[var(--color-error-border)] bg-[var(--color-error-bg)] text-[var(--color-error-foreground)]');
+        iconOk.classList.toggle('hidden', !isSuccess);
+        iconErr.classList.toggle('hidden', isSuccess);
+        timer = setTimeout(dismiss, duration || 3000);
+      }
+
+      return { success: function(m) { show('success', m); }, error: function(m) { show('error', m); } };
+    })();
+  </script>
+
+  <!-- Confirm modal -->
+  <div id="confirm-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="confirm-backdrop"></div>
+    <div class="relative bg-bg rounded-2xl border border-border shadow-2xl p-6 w-[75vw] lg:w-[50vw] space-y-4">
+      <h2 class="text-base font-semibold text-foreground font-mono" id="confirm-title">Are you sure?</h2>
+      <p class="text-sm text-foreground-muted" id="confirm-message"></p>
+      <div class="flex gap-3 justify-end pt-1">
+        <button id="confirm-cancel" type="button"
+          class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors cursor-pointer">
+          Cancel
+        </button>
+        <button id="confirm-ok" type="button"
+          class="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 transition-colors cursor-pointer">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <% if session[:flash] %>
+    <script>
+      window.__toast && window.__toast.success(<%= session.delete(:flash).to_json %>);
+    </script>
+  <% end %>
+
+  <script>
+    // Submit buttons: apply on form submit so button is still enabled when form fires
+    document.addEventListener('submit', function (e) {
+      var btn = e.target.querySelector('button[data-loading][type="submit"]');
+      if (!btn) return;
+      setTimeout(function () {
+        btn.innerHTML = btn.dataset.loading;
+        btn.disabled  = true;
+      }, 0);
+    });
+
+    // Anchor tags (sign in links)
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[data-loading]');
+      if (!a) return;
+      a.innerHTML = a.dataset.loading;
+    });
+  </script>
+
+  <script>
+    window.__confirm = (function () {
+      var modal    = document.getElementById('confirm-modal');
+      var message  = document.getElementById('confirm-message');
+      var btnOk    = document.getElementById('confirm-ok');
+      var btnCancel= document.getElementById('confirm-cancel');
+      var backdrop = document.getElementById('confirm-backdrop');
+      var _resolve;
+
+      function close() { modal.classList.add('hidden'); }
+
+      [btnCancel, backdrop].forEach(function (el) {
+        el.addEventListener('click', function () { close(); _resolve && _resolve(false); });
+      });
+      btnOk.addEventListener('click', function () { close(); _resolve && _resolve(true); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) { close(); _resolve && _resolve(false); }
+      });
+
+      return function (msg) {
+        message.textContent = msg || 'This action cannot be undone.';
+        modal.classList.remove('hidden');
+        btnOk.focus();
+        return new Promise(function (resolve) { _resolve = resolve; });
+      };
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var btn     = document.getElementById('theme-toggle');
+      var iconSun = document.getElementById('icon-sun');
+      var iconMoon= document.getElementById('icon-moon');
+
+      function applyTheme(dark) {
+        document.documentElement.classList.toggle('dark', dark);
+        iconSun.classList.toggle('hidden', !dark);
+        iconMoon.classList.toggle('hidden', dark);
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+      }
+
+      // Sync icon with current state on load
+      applyTheme(document.documentElement.classList.contains('dark'));
+
+      btn.addEventListener('click', function () {
+        document.documentElement.classList.add('theme-transitioning');
+        applyTheme(!document.documentElement.classList.contains('dark'));
+        setTimeout(function () {
+          document.documentElement.classList.remove('theme-transitioning');
+        }, 300);
+      });
+    })();
+  </script>
+
+  <!-- Sign in modal -->
+  <div id="signin-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="signin-backdrop"></div>
+    <div class="relative bg-bg rounded-2xl border border-border shadow-2xl p-8 w-[75vw] lg:w-[50vw] space-y-6">
+      <button id="signin-close" type="button" aria-label="Close"
+        class="absolute top-4 right-4 rounded-md p-1 text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div class="text-center space-y-2">
+        <img src="/assets/logo/KRC-1.png" alt="Kisumu Ruby Community" class="h-12 w-auto mx-auto" />
+        <h2 class="text-xl font-bold text-foreground font-mono">Sign in to continue</h2>
+        <p class="text-sm text-foreground-muted" id="signin-reason">You need an account to do this.</p>
+      </div>
+
+      <a href="/auth/github" data-loading="Redirecting..."
+        class="flex w-full items-center justify-center gap-3 rounded-xl border border-border px-5 py-3 text-sm font-semibold text-foreground hover:bg-bg-subtle transition-colors duration-150">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        Continue with GitHub
+      </a>
+
+      <p class="text-center text-xs text-foreground-subtle">
+        Only your GitHub username and avatar are used. No passwords stored.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    window.__signin = (function () {
+      var modal    = document.getElementById('signin-modal');
+      var reason   = document.getElementById('signin-reason');
+      var closeBtn = document.getElementById('signin-close');
+      var backdrop = document.getElementById('signin-backdrop');
+
+      function close() { modal.classList.add('hidden'); }
+
+      [closeBtn, backdrop].forEach(function (el) {
+        el.addEventListener('click', close);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) close();
+      });
+
+      return function (msg) {
+        reason.textContent = msg || 'You need an account to do this.';
+        modal.classList.remove('hidden');
+        closeBtn.focus();
+      };
+    })();
+  </script>
 
   <%= render("partials/footer") %>
 

@@ -1,0 +1,47 @@
+<section class="relative overflow-hidden bg-bg border-b border-border">
+  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:48px_48px] opacity-40" aria-hidden="true"></div>
+  <div class="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-14 sm:py-18">
+    <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl font-mono">Events</h1>
+    <p class="mt-4 text-lg text-foreground-muted">Upcoming and past events from the Kisumu Ruby Community.</p>
+  </div>
+</section>
+
+<div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-14">
+
+  <!-- Upcoming -->
+  <h2 class="text-xl font-bold text-foreground font-mono mb-6">Upcoming</h2>
+  <% if upcoming.empty? %>
+    <p class="text-foreground-muted mb-12">No upcoming events. Check back soon.</p>
+  <% else %>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-14">
+      <% upcoming.each do |event| %>
+        <a href="/events/<%= event.id %>" class="rounded-xl border border-border bg-bg hover:bg-bg-subtle transition-colors p-6 flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-widest text-foreground-subtle"><%= event.event_type&.capitalize || "Event" %></span>
+            <% if event.virtual? %>
+              <span class="text-xs rounded-full bg-primary-muted text-primary px-2 py-0.5 font-medium">Virtual</span>
+            <% end %>
+          </div>
+          <h3 class="text-base font-semibold text-foreground"><%= event.title %></h3>
+          <p class="text-sm text-foreground-muted"><%= event.date&.strftime("%A, %d %B %Y · %H:%M") %></p>
+          <p class="text-sm text-foreground-muted"><%= event.location.to_s.empty? ? "Online" : event.location %></p>
+        </a>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Past -->
+  <% unless past.empty? %>
+    <h2 class="text-xl font-bold text-foreground font-mono mb-6">Past Events</h2>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <% past.each do |event| %>
+        <a href="/events/<%= event.id %>" class="rounded-xl border border-border bg-bg-subtle hover:bg-bg transition-colors p-6 flex flex-col gap-3 opacity-75">
+          <span class="text-xs font-semibold uppercase tracking-widest text-foreground-subtle"><%= event.event_type&.capitalize || "Event" %></span>
+          <h3 class="text-base font-semibold text-foreground"><%= event.title %></h3>
+          <p class="text-sm text-foreground-muted"><%= event.date&.strftime("%d %B %Y") %></p>
+        </a>
+      <% end %>
+    </div>
+  <% end %>
+
+</div>

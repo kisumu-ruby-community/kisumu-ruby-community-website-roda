@@ -1,0 +1,26 @@
+name: PR Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  validate-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR description is filled in
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+            const stripped = body
+              .replace(/<!--.*?-->/gs, '')
+              .replace(/^[-\s\[\]xX#*_]/gm, '')
+              .trim();
+
+            if (stripped.length < 30) {
+              core.setFailed(
+                'PR description is too short or only contains the template placeholders. ' +
+                'Please fill in the Summary and Changes Made sections.'
+              );
+            }

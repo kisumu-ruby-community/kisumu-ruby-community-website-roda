@@ -1,22 +1,170 @@
-<header class="fixed top-0 left-0 right-0 z-50 w-full bg-white shadow-sm">
-  <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-    <nav class="flex h-16 items-center justify-between">
+<header
+  id="site-header"
+  role="banner"
+  class="fixed top-0 left-0 right-0 z-50 w-full bg-bg/95 backdrop-blur-sm border-b border-transparent transition-all duration-200"
+>
+  <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+    <nav aria-label="Main navigation" class="flex h-16 items-center justify-between">
 
-      <a href="/" class="flex items-center">
-        <img src="assets/logo/KRC-1.png" alt="Kisumu Ruby Community" class="h-18 w-auto" />
-        <span class="text-lg font-bold text-red-600">Kisumu Ruby Community</span>
+      <!-- Logo -->
+      <a href="/" class="flex items-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary" aria-label="Kisumu Ruby Community - Go to homepage">
+        <img src="/assets/logo/KRC-1.png" alt="Kisumu Ruby Community" class="h-14 w-auto" />
       </a>
 
-      <ul class="hidden lg:flex items-center gap-1">
-        <li><a href="/" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">Home</a></li>
-        <li><a href="/contact" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">Contact</a></li>
-        <li><a href="/about" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">About</a></li>
+      <!-- Desktop nav -->
+      <ul role="list" class="hidden lg:flex items-center gap-0.5">
+        <li><a href="/"        class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Home</a></li>
+        <li><a href="/events"  onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('events')?.scrollIntoView({behavior:'smooth'})}"  class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Events</a></li>
+        <li><a href="/contact" onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('contact')?.scrollIntoView({behavior:'smooth'})}" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Contact</a></li>
+        <li><a href="/about"   onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('about')?.scrollIntoView({behavior:'smooth'})}"   class="nav-link px-3 py-2 rounded-md text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">About</a></li>
       </ul>
 
-      <a href="/join" class="inline-flex items-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700">
-        Join Community
-      </a>
+      <!-- Right actions -->
+      <div class="flex items-center gap-2">
+      <%# 
+        <a href="/join" class="hidden lg:inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary-hover active:bg-primary-active transition-colors duration-150">
+          Join Community
+        </a>
+        %>
 
+        <% if defined?(current_user) && current_user %>
+          <% if current_user.admin? %>
+            <a href="/admin/events" class="hidden lg:inline-flex items-center rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors duration-150">Admin</a>
+          <% end %>
+          <form action="/logout" method="post" class="hidden lg:block">
+            <button type="submit" class="inline-flex items-center rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors duration-150 cursor-pointer">
+              <img src="<%= current_user.avatar_url %>" class="h-5 w-5 rounded-full mr-2" alt="" />
+              Sign Out
+            </button>
+          </form>
+        <% else %>
+          <a href="/auth/github" data-loading="Redirecting..." class="hidden lg:inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-bg-subtle transition-colors duration-150">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            Sign in with GitHub
+          </a>
+        <% end %>
+
+        <!-- Theme toggle -->
+        <button id="theme-toggle" type="button" aria-label="Toggle theme"
+          class="rounded-md p-2 text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150 cursor-pointer">
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <!-- Mobile hamburger -->
+        <button
+          id="menu-btn"
+          type="button"
+          aria-controls="mobile-nav"
+          aria-expanded="false"
+          aria-label="Open navigation menu"
+          class="lg:hidden rounded-md p-2 text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150"
+        >
+          <!-- Hamburger icon -->
+          <svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <!-- Close icon -->
+          <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
     </nav>
   </div>
+
+  <!-- Mobile drawer -->
+  <div
+    id="mobile-nav"
+    role="dialog"
+    aria-modal="false"
+    aria-label="Navigation menu"
+    class="hidden lg:hidden absolute right-0 top-full w-[75vw] bg-bg border border-border shadow-xl rounded-bl-xl px-4 pb-5 pt-3 animate-slide-down overflow-y-auto max-h-[calc(100vh-4rem)]"
+  >
+    <ul role="list" class="space-y-0.5">
+      <li><a href="/"        class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Home</a></li>
+      <li><a href="/events"  onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('events')?.scrollIntoView({behavior:'smooth'})}"  class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Events</a></li>
+      <li><a href="/contact" onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('contact')?.scrollIntoView({behavior:'smooth'})}" class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">Contact</a></li>
+      <li><a href="/about"   onclick="if(location.pathname=='/'){event.preventDefault();document.getElementById('about')?.scrollIntoView({behavior:'smooth'})}"   class="nav-link flex items-center rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-bg-subtle transition-colors duration-150">About</a></li>
+    </ul>
+    <div class="mt-4 pt-4 border-t border-border space-y-2">
+      <% if defined?(current_user) && current_user %>
+        <% if current_user.admin? %>
+          <a href="/admin/events" class="flex w-full items-center justify-center rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors duration-150">Admin</a>
+        <% end %>
+        <form action="/logout" method="post">
+          <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors duration-150">
+            <img src="<%= current_user.avatar_url %>" class="h-5 w-5 rounded-full" alt="" />
+            Sign Out
+          </button>
+        </form>
+      <% else %>
+        <a href="/auth/github" data-loading="Redirecting..." class="flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-bg-subtle transition-colors duration-150">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          Sign in with GitHub
+        </a>
+        <%#
+        <a href="/join" class="flex w-full items-center justify-center rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:bg-bg-subtle transition-colors duration-150">Join Community</a>
+        %>
+      <% end %>
+    </div>
+  </div>
 </header>
+
+<script>
+  (function () {
+    const header    = document.getElementById('site-header');
+    const btn       = document.getElementById('menu-btn');
+    const drawer    = document.getElementById('mobile-nav');
+    const iconMenu  = document.getElementById('icon-menu');
+    const iconClose = document.getElementById('icon-close');
+
+    // Scroll-aware shadow + border
+    window.addEventListener('scroll', function () {
+      const scrolled = window.scrollY > 16;
+      header.classList.toggle('shadow-sm', scrolled);
+      header.style.borderColor = scrolled ? 'var(--color-border)' : 'transparent';
+    }, { passive: true });
+
+    // Toggle mobile drawer
+    function openMenu() {
+      drawer.classList.remove('hidden');
+      btn.setAttribute('aria-expanded', 'true');
+      btn.setAttribute('aria-label', 'Close navigation menu');
+      iconMenu.classList.add('hidden');
+      iconClose.classList.remove('hidden');
+      drawer.querySelector('a')?.focus();
+    }
+
+    function closeMenu() {
+      drawer.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Open navigation menu');
+      iconMenu.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+      btn.focus();
+    }
+
+    btn.addEventListener('click', function () {
+      drawer.classList.contains('hidden') ? openMenu() : closeMenu();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !drawer.classList.contains('hidden')) closeMenu();
+    });
+
+    // Close on outside click
+    document.addEventListener('click', function (e) {
+      if (!header.contains(e.target) && !drawer.classList.contains('hidden')) closeMenu();
+    });
+
+    // Active link highlight
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-link').forEach(function (link) {
+      const href = link.getAttribute('href');
+      const isActive = href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+      if (isActive) link.classList.add('nav-link-active');
+    });
+  })();
+</script>
