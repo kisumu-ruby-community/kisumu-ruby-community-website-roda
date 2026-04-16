@@ -2,7 +2,6 @@ require "dotenv/load"
 require "roda"
 require "omniauth"
 require "omniauth-github"
-require "cgi"
 require_relative "config/database"
 require_relative "app/models/user"
 require_relative "app/models/event"
@@ -68,14 +67,8 @@ class App < Roda
         r.on "callback" do
           auth = request.env["omniauth.auth"]
           user = User.from_github(auth)
-          
-          admin_usernames = ENV.fetch("ADMIN_GITHUB_USERNAME", "").split(",").map(&:strip)
-          if admin_usernames.include?(user.github_username) && !user.admin?
-            user.promote_to_admin
-          end
           session[:user_id] = user.id
-          display_name = CGI.escapeHTML((user.name || user.github_username).to_s.strip)
-          session[:flash]   = "Welcome, #{display_name}!"
+          session[:flash]   = user.welcome_message
           r.redirect session.delete(:return_to) || "/"
         end
       end
