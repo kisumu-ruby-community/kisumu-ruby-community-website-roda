@@ -2,10 +2,11 @@ FROM ruby:3.4.3-slim
 
 # System dependencies
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+    curl \
     build-essential \
     libpq-dev \
-    nodejs \
-    npm \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
