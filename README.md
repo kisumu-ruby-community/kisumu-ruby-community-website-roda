@@ -11,7 +11,7 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 - Sequel - database toolkit
 - PostgreSQL - database
 - Puma - web server
-- Tailwind CSS v4 - styling (Space Grotesk + JetBrains Mono)
+- Tailwind CSS v4 - styling (Space Mono + JetBrains Mono)
 - ERB - templating
 - Node.js / npm - for Tailwind CLI
 - dotenv - environment variable loading
