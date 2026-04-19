@@ -147,8 +147,8 @@
   --color-error-border: var(--color-error-border);
   --color-error-foreground: var(--color-error-foreground);
 
-  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Space Mono", "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "Space Mono", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 /* ── Base styles ── */
@@ -157,7 +157,7 @@
 *::after {
   box-sizing: border-box;
   font-family:
-    "Space Grotesk",
+    "Space Mono",
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
@@ -168,7 +168,7 @@
 
 html {
   scroll-behavior: smooth;
-  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Space Mono", ui-sans-serif, system-ui, sans-serif;
 }
 
 code,
@@ -184,6 +184,14 @@ a, button {
 
 button:disabled {
 	cursor: not-allowed;
+}
+
+h1 {
+	font-family: 'JetBrains Mono', monospace;
+}
+
+span {
+	font-family: 'Space Mono', monospace;
 }
 
 @media (prefers-reduced-motion: reduce) {
