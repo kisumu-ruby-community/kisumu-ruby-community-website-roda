@@ -1,0 +1,8 @@
+.git
+.env
+node_modules
+.ruby-lsp
+tests
+.agents
+.kiro
+.claude
