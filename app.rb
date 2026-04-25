@@ -158,7 +158,8 @@ class App < Roda
             title: ev.title,
             description: ev.description.to_s.slice(0, 160),
             url: "#{request.base_url}/events/#{id}",
-            type: "event"
+            type: "event",
+            **(ev.poster? ? { image: ev.cover_image } : {})
           )
         end
         view("pages/events/show", locals: locals)
