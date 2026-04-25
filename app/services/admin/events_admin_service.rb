@@ -12,8 +12,9 @@ class EventsAdminService
   end
 
   def self.create(params, user)
+    remove_cover = params["remove_cover_image"] == "1"
     attrs = permitted(params).merge(
-      cover_image: resolve_image(params["cover_image_file"], params["cover_image"]),
+      cover_image: resolve_image(params["cover_image_file"], params["cover_image"], remove: remove_cover),
       created_by:  user.id,
       created_at:  Time.now
     )
@@ -26,7 +27,8 @@ class EventsAdminService
     errors = validate(params)
     return errors unless errors.empty?
     event = Event.first(id: id)
-    new_image = resolve_image(params["cover_image_file"], params["cover_image"], event.cover_image)
+    remove_cover = params["remove_cover_image"] == "1"
+    new_image = resolve_image(params["cover_image_file"], params["cover_image"], event.cover_image, remove: remove_cover)
     if new_image != event.cover_image
       ImageUpload.delete(event.cover_image)
     end
@@ -47,8 +49,9 @@ class EventsAdminService
 
   private
 
-  # Returns uploaded path, or URL string, or existing value as fallback.
-  def self.resolve_image(file, url, existing = nil)
+  # Returns uploaded path, URL string, nil (if removed), or existing value as fallback.
+  def self.resolve_image(file, url, existing = nil, remove: false)
+    return nil if remove
     uploaded = ImageUpload.save(file)
     return uploaded if uploaded
     url_str = url.to_s.strip
@@ -89,7 +92,7 @@ class EventsAdminService
     speakers = speakers_params.is_a?(Hash) ? speakers_params.values : Array(speakers_params)
     speakers.each do |sp|
       next if sp["name"].to_s.strip.empty?
-      photo = resolve_image(sp["photo_file"], sp["photo_url"])
+      photo = resolve_image(sp["photo_file"], sp["photo_url"], remove: sp["remove_photo"] == "1")
       EventSpeaker.create(
         event_id:  event.id,
         name:      sp["name"].to_s.strip,
