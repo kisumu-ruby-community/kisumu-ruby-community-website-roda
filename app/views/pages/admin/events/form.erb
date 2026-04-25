@@ -86,7 +86,7 @@
                        data-input-name="speakers[<%= i %>][photo_file]">
                     <% if sp.photo_url && !sp.photo_url.empty? %>
                       <div class="img-preview">
-                        <img src="<%= sp.photo_url %>" alt="<%= sp.name %>" class="w-full aspect-[2/1] object-cover" />
+                        <img src="<%= sp.photo_url %>" alt="<%= sp.name %>" class="w-full aspect-video object-cover" />
                         <button type="button" class="img-remove absolute top-2 right-2 rounded-full bg-bg/80 border border-border p-1.5 hover:bg-bg transition-colors" aria-label="Remove image">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
@@ -124,11 +124,11 @@
           <!-- Cover image upload -->
           <div>
             <label class="block text-sm font-medium text-foreground mb-1.5">Poster / Cover Image</label>
-            <div id="cover-drop-zone" class="img-drop-zone relative rounded-xl border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer overflow-hidden"
+            <div id="cover-drop-zone" class="img-drop-zone relative rounded-2xl border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer overflow-hidden"
                  data-input-name="cover_image_file">
               <% if event&.poster? %>
                 <div class="img-preview">
-                  <img src="<%= event.cover_image %>" alt="Current poster" class="w-full aspect-[2/1] object-cover" />
+                  <img src="<%= event.cover_image %>" alt="Current poster" class="w-full aspect-video object-cover" />
                   <button type="button" class="img-remove absolute top-2 right-2 rounded-full bg-bg/80 border border-border p-1.5 hover:bg-bg transition-colors" aria-label="Remove image">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                   </button>
@@ -280,7 +280,7 @@
       var wrap = document.createElement('div');
       wrap.className = 'img-preview';
       wrap.innerHTML =
-        '<img src="' + e.target.result + '" alt="Preview" class="w-full aspect-[2/1] object-cover" />' +
+        '<img src="' + e.target.result + '" alt="Preview" class="w-full aspect-video object-cover" />' +
         '<button type="button" class="img-remove absolute top-2 right-2 p-1.5 rounded-full bg-bg/80 border border-border hover:bg-bg transition-colors" aria-label="Remove image">' +
           '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>' +
         '</button>';
