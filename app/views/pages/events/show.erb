@@ -45,6 +45,10 @@
     <!-- Main content -->
     <div class="lg:col-span-2 space-y-10">
 
+      <% if event.poster? %>
+        <img src="<%= event.cover_image %>" alt="<%= event.title %> poster" class="w-full rounded-xl object-cover max-h-[32rem]" />
+      <% end %>
+
       <% if event.description && !event.description.empty? %>
         <div class="prose prose-slate max-w-none text-foreground-muted leading-relaxed">
           <%= event.description %>
