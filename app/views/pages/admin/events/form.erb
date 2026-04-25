@@ -101,6 +101,7 @@
                     </div>
                     <input type="file" name="speakers[<%= i %>][photo_file]" accept="image/jpeg,image/png,image/gif,image/webp"
                       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                    <input type="hidden" name="speakers[<%= i %>][remove_photo]" value="0" class="img-remove-flag" />
                   </div>
                   <button type="button" class="url-toggle mt-2 text-xs text-foreground-muted hover:text-foreground transition-colors">Use URL instead</button>
                   <input type="text" name="speakers[<%= i %>][photo_url]" value="" placeholder="https://example.com/photo.jpg"
@@ -143,6 +144,7 @@
               </div>
               <input type="file" name="cover_image_file" accept="image/jpeg,image/png,image/gif,image/webp"
                 class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+              <input type="hidden" name="remove_cover_image" value="0" class="img-remove-flag" />
             </div>
             <button type="button" class="url-toggle mt-2 text-xs text-foreground-muted hover:text-foreground transition-colors">Use URL instead</button>
             <input type="url" name="cover_image" value="" placeholder="https://example.com/poster.jpg"
@@ -197,6 +199,7 @@
           '<span class="text-xs text-foreground-muted mt-1">JPG, PNG, GIF or WebP · Max 5 MB</span>' +
         '</div>' +
         '<input type="file" name="speakers[' + i + '][photo_file]" accept="image/jpeg,image/png,image/gif,image/webp" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />' +
+        '<input type="hidden" name="speakers[' + i + '][remove_photo]" value="0" class="img-remove-flag" />' +
       '</div>' +
       '<button type="button" class="url-toggle mt-2 text-xs text-foreground-muted hover:text-foreground transition-colors">Use URL instead</button>' +
       '<input type="text" name="speakers[' + i + '][photo_url]" placeholder="https://example.com/photo.jpg" class="url-input mt-1.5 w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary hidden" />' +
@@ -269,6 +272,8 @@
 
   function showPreview(zone, file) {
     if (!file || !file.type.startsWith('image/')) return;
+    var flag = zone.querySelector('.img-remove-flag');
+    if (flag) flag.value = '0';
     var reader = new FileReader();
     reader.onload = function (e) {
       var old = zone.querySelector('.img-preview');
@@ -301,6 +306,8 @@
     zone.querySelector('.img-placeholder').classList.remove('hidden');
     var fileInput = zone.querySelector('input[type="file"]');
     fileInput.value = '';
+    var flag = zone.querySelector('.img-remove-flag');
+    if (flag) flag.value = '1';
   }
 
   // Init all zones on page load
