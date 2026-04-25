@@ -4,6 +4,7 @@ class Event < Sequel::Model
 
   def virtual?   = !meeting_url.nil? && !meeting_url.empty?
   def upcoming?  = date && date > Time.now
+  def poster?    = !cover_image.nil? && !cover_image.empty?
 
   # Generates a Google Calendar "Add to Calendar" URL
   def google_calendar_url
