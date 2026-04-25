@@ -2,14 +2,14 @@ require_relative "../../lib/display_count"
 
 class EventsService
   def self.index
-    all     = Event.order(:date).all
+    all     = Event.where(status: "published").order(:date).all
     upcoming = all.select(&:upcoming?)
     past     = all.reject(&:upcoming?)
     { title: "Events", upcoming: upcoming, past: past }
   end
 
   def self.show(id, current_user = nil)
-    event = Event.first(id: id.to_s)
+    event = Event.first(id: id.to_s, status: "published")
     return { title: "Event not found", event: nil, speakers: [], rsvp_count: 0, user_rsvpd: false } unless event
 
     speakers   = EventSpeaker.where(event_id: event.id).all
