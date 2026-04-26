@@ -42,11 +42,16 @@ module ImageUpload
 
   # Deletes a Cloudinary-hosted image by its stored URL.
   def self.delete(url)
-    return unless url.is_a?(String) && url.include?("cloudinary.com")
+    return unless url.is_a?(String)
+
+    uri = URI.parse(url)
+    allowed_hosts = ["res.cloudinary.com"]
+    return unless uri.is_a?(URI::HTTPS) && allowed_hosts.include?(uri.host)
+
     public_id = extract_public_id(url)
     return if public_id.to_s.empty?
     Cloudinary::Uploader.destroy(public_id)
-  rescue Cloudinary::Error
+  rescue URI::InvalidURIError, Cloudinary::Error
     nil
   end
 
