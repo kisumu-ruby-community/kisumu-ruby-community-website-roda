@@ -2,23 +2,46 @@ require "securerandom"
 require "fileutils"
 
 module ImageUpload
-  UPLOAD_DIR  = File.join("public", "uploads").freeze
-  ALLOWED_EXT = %w[.jpg .jpeg .png .gif .webp].freeze
-  MAX_SIZE    = 5 * 1024 * 1024 # 5 MB
+  UPLOAD_DIR = File.join("public", "uploads").freeze
+  MAX_SIZE   = 5 * 1024 * 1024 # 5 MB
 
-  # Accepts a Rack uploaded file hash (from multipart form) and returns the public URL path (e.g. "/uploads/abc123.jpg") or nil.
+  # Magic byte signatures — checked against the raw file bytes, not the filename.
+  MIME_SIGNATURES = {
+    "image/jpeg" => ->(b) { b[0..2]  == [0xFF, 0xD8, 0xFF] },
+    "image/png"  => ->(b) { b[0..7]  == [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A] },
+    "image/gif"  => ->(b) { b[0..2]  == [0x47, 0x49, 0x46] && b[3] == 0x38 &&
+                             (b[4] == 0x37 || b[4] == 0x39) && b[5] == 0x61 },
+    "image/webp" => ->(b) { b[0..3]  == [0x52, 0x49, 0x46, 0x46] &&
+                             b[8..11] == [0x57, 0x45, 0x42, 0x50] },
+  }.freeze
+
+  EXT_FOR = {
+    "image/jpeg" => ".jpg",
+    "image/png"  => ".png",
+    "image/gif"  => ".gif",
+    "image/webp" => ".webp",
+  }.freeze
+
+  # Accepts a Rack uploaded file hash (from multipart form) and returns the public URL path
+  # (e.g. "/uploads/abc123.jpg") or nil on validation failure.
   def self.save(file_hash)
     return nil unless file_hash.is_a?(Hash) && file_hash[:tempfile]
 
-    original = file_hash[:filename].to_s
-    ext = File.extname(original).downcase
-    return nil unless ALLOWED_EXT.include?(ext)
-    return nil if file_hash[:tempfile].size > MAX_SIZE
+    tempfile = file_hash[:tempfile]
+    return nil if tempfile.size > MAX_SIZE
+
+    header = tempfile.read(12)
+    tempfile.rewind
+    return nil unless header && header.bytesize >= 3
+
+    bytes = header.bytes
+    mime  = MIME_SIGNATURES.find { |_, check| check.call(bytes) }&.first
+    return nil unless mime
 
     FileUtils.mkdir_p(UPLOAD_DIR)
-    name = "#{SecureRandom.hex(16)}#{ext}"
+    name = "#{SecureRandom.hex(16)}#{EXT_FOR[mime]}"
     dest = File.join(UPLOAD_DIR, name)
-    File.binwrite(dest, file_hash[:tempfile].read)
+    File.binwrite(dest, tempfile.read)
     "/uploads/#{name}"
   end
 
