@@ -4,7 +4,7 @@ class SecurityHeaders
     "script-src 'self' 'unsafe-inline'",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data: https://avatars.githubusercontent.com https://github.com",
+    "img-src 'self' data: https://avatars.githubusercontent.com https://github.com https://res.cloudinary.com",
     "connect-src 'self'",
     "frame-ancestors 'none'",
     "base-uri 'self'",
