@@ -1,5 +1,5 @@
 const CACHE = "krc-v1";
-const STATIC = ["/style.css", "/assets/logo/KRC-1.png"];
+const STATIC = ["/assets/logo/KRC-1.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(STATIC)));
@@ -19,7 +19,21 @@ self.addEventListener("fetch", e => {
   const { request } = e;
   const url = new URL(request.url);
 
-  // Cache-first for static assets
+  // Network-first for CSS: always serve the latest build, cache as offline fallback.
+  if (url.pathname === "/style.css") {
+    e.respondWith(
+      fetch(request)
+        .then(res => {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(request, clone));
+          return res;
+        })
+        .catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // Cache-first for infrequently changing static assets.
   if (STATIC.some(p => url.pathname === p)) {
     e.respondWith(
       caches.match(request).then(cached => cached || fetch(request))
@@ -27,7 +41,7 @@ self.addEventListener("fetch", e => {
     return;
   }
 
-  // Network-first for navigation
+  // Network-first for navigation with offline fallback.
   if (request.mode === "navigate") {
     e.respondWith(
       fetch(request).catch(() => caches.match("/"))
