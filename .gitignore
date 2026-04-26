@@ -55,3 +55,7 @@ src/environments/
 
 # Static files
 public/style.css
+
+# Uploaded images
+public/uploads/*
+!public/uploads/.keep

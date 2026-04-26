@@ -45,6 +45,12 @@
     <!-- Main content -->
     <div class="lg:col-span-2 space-y-10">
 
+      <% if event.poster? %>
+        <div class="rounded-2xl overflow-hidden border border-border aspect-video max-w-2xl bg-bg-subtle">
+          <img src="<%= event.cover_image %>" alt="<%= event.title %> poster" class="h-full w-full object-cover" />
+        </div>
+      <% end %>
+
       <% if event.description && !event.description.empty? %>
         <div class="prose prose-slate max-w-none text-foreground-muted leading-relaxed">
           <%= event.description %>
@@ -57,18 +63,22 @@
           <h2 class="text-xl font-bold text-foreground font-mono mb-6">Speakers</h2>
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <% speakers.each do |sp| %>
-              <div class="rounded-xl border border-border bg-bg p-5 flex gap-4">
-                <% if sp.photo_url && !sp.photo_url.empty? %>
-                  <img src="<%= sp.photo_url %>" alt="<%= sp.name %>" class="h-12 w-12 rounded-full object-cover flex-shrink-0" />
-                <% else %>
-                  <div class="h-12 w-12 rounded-full bg-primary-muted flex items-center justify-center text-primary font-bold flex-shrink-0">
-                    <%= sp.name[0].upcase %>
+              <div class="rounded-xl border border-border bg-bg p-6 flex flex-col gap-4">
+                <div class="flex items-center justify-between gap-4">
+                  <div>
+                    <p class="font-semibold text-foreground"><%= sp.name %></p>
                   </div>
-                <% end %>
-                <div>
-                  <p class="font-semibold text-foreground"><%= sp.name %></p>
-                  <p class="text-sm text-foreground-muted mt-1"><%= sp.bio %></p>
+                  <% if sp.photo_url && !sp.photo_url.empty? %>
+                    <img src="<%= sp.photo_url %>" alt="<%= sp.name %>" class="h-14 w-14 rounded-full object-cover shrink-0" />
+                  <% else %>
+                    <div class="h-14 w-14 rounded-full bg-primary-muted flex items-center justify-center text-primary font-bold shrink-0">
+                      <%= sp.name[0].upcase %>
+                    </div>
+                  <% end %>
                 </div>
+                <% if sp.bio && !sp.bio.empty? %>
+                  <p class="text-sm leading-relaxed text-foreground-muted"><%= sp.bio %></p>
+                <% end %>
               </div>
             <% end %>
           </div>

@@ -15,16 +15,23 @@
   <% else %>
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-14">
       <% upcoming.each do |event| %>
-        <a href="/events/<%= event.id %>" class="rounded-xl border border-border bg-bg hover:bg-bg-subtle transition-colors p-6 flex flex-col gap-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold uppercase tracking-widest text-foreground-subtle"><%= event.event_type&.capitalize || "Event" %></span>
-            <% if event.virtual? %>
-              <span class="text-xs rounded-full bg-primary-muted text-primary px-2 py-0.5 font-medium">Virtual</span>
-            <% end %>
+        <a href="/events/<%= event.id %>" class="rounded-2xl border border-border bg-bg hover:bg-bg-subtle transition-colors overflow-hidden flex flex-col">
+          <% if event.poster? %>
+            <div class="h-44 w-full overflow-hidden bg-bg-subtle">
+              <img src="<%= event.cover_image %>" alt="<%= event.title %> poster" class="h-full w-full object-cover" loading="lazy" />
+            </div>
+          <% end %>
+          <div class="p-6 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold uppercase tracking-widest text-foreground-subtle"><%= event.event_type&.capitalize || "Event" %></span>
+              <% if event.virtual? %>
+                <span class="text-xs rounded-full bg-primary-muted text-primary px-2 py-0.5 font-medium">Virtual</span>
+              <% end %>
+            </div>
+            <h3 class="text-base font-semibold text-foreground"><%= event.title %></h3>
+            <p class="text-sm text-foreground-muted"><%= event.date&.strftime("%A, %d %B %Y · %H:%M") %></p>
+            <p class="text-sm text-foreground-muted"><%= event.location.to_s.empty? ? "Online" : event.location %></p>
           </div>
-          <h3 class="text-base font-semibold text-foreground"><%= event.title %></h3>
-          <p class="text-sm text-foreground-muted"><%= event.date&.strftime("%A, %d %B %Y · %H:%M") %></p>
-          <p class="text-sm text-foreground-muted"><%= event.location.to_s.empty? ? "Online" : event.location %></p>
         </a>
       <% end %>
     </div>
@@ -35,10 +42,17 @@
     <h2 class="text-xl font-bold text-foreground font-mono mb-6">Past Events</h2>
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <% past.each do |event| %>
-        <a href="/events/<%= event.id %>" class="rounded-xl border border-border bg-bg-subtle hover:bg-bg transition-colors p-6 flex flex-col gap-3 opacity-75">
-          <span class="text-xs font-semibold uppercase tracking-widest text-foreground-subtle"><%= event.event_type&.capitalize || "Event" %></span>
-          <h3 class="text-base font-semibold text-foreground"><%= event.title %></h3>
-          <p class="text-sm text-foreground-muted"><%= event.date&.strftime("%d %B %Y") %></p>
+        <a href="/events/<%= event.id %>" class="rounded-2xl border border-border bg-bg-subtle hover:bg-bg transition-colors overflow-hidden flex flex-col opacity-75">
+          <% if event.poster? %>
+            <div class="h-44 w-full overflow-hidden bg-bg-subtle">
+              <img src="<%= event.cover_image %>" alt="<%= event.title %> poster" class="h-full w-full object-cover" loading="lazy" />
+            </div>
+          <% end %>
+          <div class="p-6 flex flex-col gap-3">
+            <span class="text-xs font-semibold uppercase tracking-widest text-foreground-subtle"><%= event.event_type&.capitalize || "Event" %></span>
+            <h3 class="text-base font-semibold text-foreground"><%= event.title %></h3>
+            <p class="text-sm text-foreground-muted"><%= event.date&.strftime("%d %B %Y") %></p>
+          </div>
         </a>
       <% end %>
     </div>

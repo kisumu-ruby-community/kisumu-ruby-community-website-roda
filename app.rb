@@ -87,7 +87,7 @@ class App < Roda
     # Sitemap
     r.get "sitemap.xml" do
       response["Content-Type"] = "application/xml; charset=utf-8"
-      event_ids = DB[:events].select(:id).map(:id)
+      event_ids = DB[:events].where(status: "published").select(:id).map(:id)
       base = request.base_url
       static = ["/", "/about", "/events", "/contact"]
       urls = static.map { |p| "#{base}#{p}" } +
@@ -158,7 +158,8 @@ class App < Roda
             title: ev.title,
             description: ev.description.to_s.slice(0, 160),
             url: "#{request.base_url}/events/#{id}",
-            type: "event"
+            type: "event",
+            **(ev.poster? ? { image: ev.cover_image } : {})
           )
         end
         view("pages/events/show", locals: locals)

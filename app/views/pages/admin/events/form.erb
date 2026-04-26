@@ -22,7 +22,7 @@
     </div>
   <% end %>
 
-  <form action="<%= event ? "/admin/events/#{event.id}" : "/admin/events" %>" method="post">
+  <form action="<%= event ? "/admin/events/#{event.id}" : "/admin/events" %>" method="post" enctype="multipart/form-data">
     <div class="grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-16">
 
       <!-- Left: main fields -->
@@ -78,11 +78,34 @@
                   <span class="text-sm font-medium text-foreground">Speaker <%= i + 1 %></span>
                   <button type="button" class="remove-speaker text-xs text-red-600 hover:underline">Remove</button>
                 </div>
-                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <input type="text" name="speakers[<%= i %>][name]" value="<%= sp.name %>" placeholder="Name"
-                    class="w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
-                  <input type="text" name="speakers[<%= i %>][photo_url]" value="<%= sp.photo_url %>" placeholder="Photo URL"
-                    class="w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
+                <input type="text" name="speakers[<%= i %>][name]" value="<%= sp.name %>" placeholder="Name"
+                  class="w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                  <label class="block text-xs text-foreground-muted mb-1">Photo</label>
+                  <div class="img-drop-zone relative rounded-xl border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer overflow-hidden"
+                       data-input-name="speakers[<%= i %>][photo_file]">
+                    <% if sp.photo_url && !sp.photo_url.empty? %>
+                      <div class="img-preview">
+                        <img src="<%= sp.photo_url %>" alt="<%= sp.name %>" class="w-full aspect-video object-cover" />
+                        <button type="button" class="img-remove absolute top-2 right-2 rounded-full bg-bg/80 border border-border p-1.5 hover:bg-bg transition-colors" aria-label="Remove image">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                      </div>
+                    <% end %>
+                    <div class="img-placeholder flex flex-col items-center justify-center py-8 px-4 text-center <%= sp.photo_url && !sp.photo_url.empty? ? 'hidden' : '' %>">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-foreground-muted mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"/>
+                      </svg>
+                      <span class="text-sm text-foreground-muted">Drop photo here or <span class="text-primary font-medium">browse</span></span>
+                      <span class="text-xs text-foreground-muted mt-1">JPG, PNG, GIF or WebP · Max 5 MB</span>
+                    </div>
+                    <input type="file" name="speakers[<%= i %>][photo_file]" accept="image/jpeg,image/png,image/gif,image/webp"
+                      class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                    <input type="hidden" name="speakers[<%= i %>][remove_photo]" value="0" class="img-remove-flag" />
+                  </div>
+                  <button type="button" class="url-toggle mt-2 text-xs text-foreground-muted hover:text-foreground transition-colors">Use URL instead</button>
+                  <input type="text" name="speakers[<%= i %>][photo_url]" value="" placeholder="https://example.com/photo.jpg"
+                    class="url-input mt-1.5 w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary hidden" />
                 </div>
                 <textarea name="speakers[<%= i %>][bio]" rows="2" placeholder="Short bio"
                   class="w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"><%= sp.bio %></textarea>
@@ -98,6 +121,35 @@
 
         <div class="rounded-xl border border-border bg-bg-subtle p-5 space-y-5">
           <h2 class="text-sm font-semibold text-foreground font-mono">Settings</h2>
+
+          <!-- Cover image upload -->
+          <div>
+            <label class="block text-sm font-medium text-foreground mb-1.5">Poster / Cover Image</label>
+            <div id="cover-drop-zone" class="img-drop-zone relative rounded-2xl border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer overflow-hidden"
+                 data-input-name="cover_image_file">
+              <% if event&.poster? %>
+                <div class="img-preview">
+                  <img src="<%= event.cover_image %>" alt="Current poster" class="w-full aspect-video object-cover" />
+                  <button type="button" class="img-remove absolute top-2 right-2 rounded-full bg-bg/80 border border-border p-1.5 hover:bg-bg transition-colors" aria-label="Remove image">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                  </button>
+                </div>
+              <% end %>
+              <div class="img-placeholder flex flex-col items-center justify-center py-8 px-4 text-center <%= event&.poster? ? 'hidden' : '' %>">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-foreground-muted mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"/>
+                </svg>
+                <span class="text-sm text-foreground-muted">Drop poster here or <span class="text-primary font-medium">browse</span></span>
+                <span class="text-xs text-foreground-muted mt-1">JPG, PNG, GIF or WebP · Max 5 MB</span>
+              </div>
+              <input type="file" name="cover_image_file" accept="image/jpeg,image/png,image/gif,image/webp"
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+              <input type="hidden" name="remove_cover_image" value="0" class="img-remove-flag" />
+            </div>
+            <button type="button" class="url-toggle mt-2 text-xs text-foreground-muted hover:text-foreground transition-colors">Use URL instead</button>
+            <input type="url" name="cover_image" value="" placeholder="https://example.com/poster.jpg"
+              class="url-input mt-1.5 w-full rounded-lg border border-border bg-bg px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary hidden" />
+          </div>
 
           <div>
             <label class="block text-sm font-medium text-foreground mb-1.5">Event Type</label>
@@ -133,8 +185,26 @@
 
 <script>
 (function () {
+  // --- Speakers dynamic add/remove ---
   var list  = document.getElementById('speakers-list');
   var count = list.querySelectorAll('.speaker-entry').length;
+
+  function speakerPhotoHTML(i) {
+    return '<div>' +
+      '<label class="block text-xs text-foreground-muted mb-1">Photo</label>' +
+      '<div class="img-drop-zone relative rounded-xl border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer overflow-hidden" data-input-name="speakers[' + i + '][photo_file]">' +
+        '<div class="img-placeholder flex flex-col items-center justify-center py-8 px-4 text-center">' +
+          '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-foreground-muted mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"/></svg>' +
+          '<span class="text-sm text-foreground-muted">Drop photo here or <span class="text-primary font-medium">browse</span></span>' +
+          '<span class="text-xs text-foreground-muted mt-1">JPG, PNG, GIF or WebP · Max 5 MB</span>' +
+        '</div>' +
+        '<input type="file" name="speakers[' + i + '][photo_file]" accept="image/jpeg,image/png,image/gif,image/webp" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />' +
+        '<input type="hidden" name="speakers[' + i + '][remove_photo]" value="0" class="img-remove-flag" />' +
+      '</div>' +
+      '<button type="button" class="url-toggle mt-2 text-xs text-foreground-muted hover:text-foreground transition-colors">Use URL instead</button>' +
+      '<input type="text" name="speakers[' + i + '][photo_url]" placeholder="https://example.com/photo.jpg" class="url-input mt-1.5 w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary hidden" />' +
+    '</div>';
+  }
 
   document.getElementById('add-speaker').addEventListener('click', function () {
     var i   = count++;
@@ -142,12 +212,11 @@
     div.className = 'speaker-entry rounded-xl border border-border p-4 space-y-3';
     div.innerHTML =
       '<div class="flex justify-between items-center"><span class="text-sm font-medium text-foreground">Speaker ' + (i + 1) + '</span><button type="button" class="remove-speaker text-xs text-red-600 hover:underline">Remove</button></div>' +
-      '<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">' +
-        '<input type="text" name="speakers[' + i + '][name]" placeholder="Name" class="w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />' +
-        '<input type="text" name="speakers[' + i + '][photo_url]" placeholder="Photo URL" class="w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />' +
-      '</div>' +
+      '<input type="text" name="speakers[' + i + '][name]" placeholder="Name" class="w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />' +
+      speakerPhotoHTML(i) +
       '<textarea name="speakers[' + i + '][bio]" rows="2" placeholder="Short bio" class="w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"></textarea>';
     list.appendChild(div);
+    initDropZones(div);
   });
 
   list.addEventListener('click', function (e) {
@@ -155,5 +224,93 @@
       e.target.closest('.speaker-entry').remove();
     }
   });
+
+  // --- Drop-zone & preview logic ---
+  function initDropZones(root) {
+    root.querySelectorAll('.img-drop-zone').forEach(function (zone) {
+      var fileInput   = zone.querySelector('input[type="file"]');
+      var placeholder = zone.querySelector('.img-placeholder');
+
+      // Drag highlight
+      zone.addEventListener('dragover', function (e) { e.preventDefault(); zone.classList.add('border-primary'); });
+      zone.addEventListener('dragleave', function ()  { zone.classList.remove('border-primary'); });
+      zone.addEventListener('drop', function (e) {
+        e.preventDefault();
+        zone.classList.remove('border-primary');
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          showPreview(zone, e.dataTransfer.files[0]);
+        }
+      });
+
+      // File chosen via browse
+      fileInput.addEventListener('change', function () {
+        if (fileInput.files.length) showPreview(zone, fileInput.files[0]);
+      });
+    });
+
+    // URL toggle buttons
+    root.querySelectorAll('.url-toggle').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var input = btn.parentElement.querySelector('.url-input') || btn.nextElementSibling;
+        var isHidden = input.classList.contains('hidden');
+        input.classList.toggle('hidden');
+        btn.textContent = isHidden ? 'Hide URL field' : 'Use URL instead';
+      });
+    });
+
+    // Remove buttons on existing previews
+    root.querySelectorAll('.img-remove').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var zone = btn.closest('.img-drop-zone');
+        clearPreview(zone);
+      });
+    });
+  }
+
+  function showPreview(zone, file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    var flag = zone.querySelector('.img-remove-flag');
+    if (flag) flag.value = '0';
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var old = zone.querySelector('.img-preview');
+      if (old) old.remove();
+
+      var placeholder = zone.querySelector('.img-placeholder');
+      placeholder.classList.add('hidden');
+
+      var wrap = document.createElement('div');
+      wrap.className = 'img-preview';
+      wrap.innerHTML =
+        '<img src="' + e.target.result + '" alt="Preview" class="w-full aspect-video object-cover" />' +
+        '<button type="button" class="img-remove absolute top-2 right-2 p-1.5 rounded-full bg-bg/80 border border-border hover:bg-bg transition-colors" aria-label="Remove image">' +
+          '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>' +
+        '</button>';
+      zone.insertBefore(wrap, placeholder);
+
+      wrap.querySelector('.img-remove').addEventListener('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        clearPreview(zone);
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearPreview(zone) {
+    var preview = zone.querySelector('.img-preview');
+    if (preview) preview.remove();
+    zone.querySelector('.img-placeholder').classList.remove('hidden');
+    var fileInput = zone.querySelector('input[type="file"]');
+    fileInput.value = '';
+    var flag = zone.querySelector('.img-remove-flag');
+    if (flag) flag.value = '1';
+  }
+
+  // Init all zones on page load
+  initDropZones(document);
 })();
 </script>
