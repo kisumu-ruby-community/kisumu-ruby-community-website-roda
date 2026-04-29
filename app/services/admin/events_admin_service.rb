@@ -86,19 +86,35 @@ class EventsAdminService
 
   def self.sync_speakers(event, speakers_params)
     old_speakers = EventSpeaker.where(event_id: event.id).all
-    old_speakers.each { |sp| ImageUpload.delete(sp.photo_url) }
-    EventSpeaker.where(event_id: event.id).delete
+    old_by_id    = old_speakers.each_with_object({}) { |sp, h| h[sp.id] = sp }
 
+    kept_ids = []
     speakers = speakers_params.is_a?(Hash) ? speakers_params.values : Array(speakers_params)
     speakers.each do |sp|
       next if sp["name"].to_s.strip.empty?
-      photo = resolve_image(sp["photo_file"], sp["photo_url"], remove: sp["remove_photo"] == "1")
-      EventSpeaker.create(
-        event_id:  event.id,
-        name:      sp["name"].to_s.strip,
-        bio:       sp["bio"].to_s.strip,
-        photo_url: photo.to_s
-      )
+      existing   = sp["existing_id"].to_s.strip.empty? ? nil : old_by_id[sp["existing_id"]]
+      old_photo  = existing&.photo_url
+      photo      = resolve_image(sp["photo_file"], sp["photo_url"], old_photo, remove: sp["remove_photo"] == "1")
+
+      if existing
+        ImageUpload.delete(old_photo) if photo != old_photo
+        existing.update(name: sp["name"].to_s.strip, bio: sp["bio"].to_s.strip, photo_url: photo.to_s)
+        kept_ids << existing.id
+      else
+        rec = EventSpeaker.create(
+          event_id:  event.id,
+          name:      sp["name"].to_s.strip,
+          bio:       sp["bio"].to_s.strip,
+          photo_url: photo.to_s
+        )
+        kept_ids << rec.id
+      end
+    end
+
+    # Remove speakers that were deleted from the form
+    old_speakers.reject { |sp| kept_ids.include?(sp.id) }.each do |sp|
+      ImageUpload.delete(sp.photo_url)
+      sp.delete
     end
   end
 end
