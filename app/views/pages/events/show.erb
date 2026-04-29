@@ -53,7 +53,9 @@
 
       <% if event.description && !event.description.empty? %>
         <div class="prose prose-slate max-w-none text-foreground-muted leading-relaxed">
-          <%= event.description %>
+          <% event.description.split(/\n\n+/).each do |para| %>
+            <p><%= CGI.escapeHTML(para).gsub("\n", "<br>") %></p>
+          <% end %>
         </div>
       <% end %>
 
