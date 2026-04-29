@@ -78,6 +78,7 @@
                   <span class="text-sm font-medium text-foreground">Speaker <%= i + 1 %></span>
                   <button type="button" class="remove-speaker text-xs text-red-600 hover:underline">Remove</button>
                 </div>
+                <input type="hidden" name="speakers[<%= i %>][existing_id]" value="<%= sp.id %>" />
                 <input type="text" name="speakers[<%= i %>][name]" value="<%= sp.name %>" placeholder="Name"
                   class="w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
                 <div>
@@ -104,7 +105,7 @@
                     <input type="hidden" name="speakers[<%= i %>][remove_photo]" value="0" class="img-remove-flag" />
                   </div>
                   <button type="button" class="url-toggle mt-2 text-xs text-foreground-muted hover:text-foreground transition-colors">Use URL instead</button>
-                  <input type="text" name="speakers[<%= i %>][photo_url]" value="" placeholder="https://example.com/photo.jpg"
+                  <input type="text" name="speakers[<%= i %>][photo_url]" value="<%= sp.photo_url %>" placeholder="https://example.com/photo.jpg"
                     class="url-input mt-1.5 w-full rounded-lg border border-border bg-bg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary hidden" />
                 </div>
                 <textarea name="speakers[<%= i %>][bio]" rows="2" placeholder="Short bio"
@@ -308,6 +309,9 @@
     fileInput.value = '';
     var flag = zone.querySelector('.img-remove-flag');
     if (flag) flag.value = '1';
+    // Clear the URL input so the old URL isn't sent back
+    var urlInput = zone.parentElement.querySelector('.url-input');
+    if (urlInput) urlInput.value = '';
   }
 
   // Init all zones on page load
