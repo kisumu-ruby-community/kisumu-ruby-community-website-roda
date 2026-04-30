@@ -37,6 +37,21 @@ class EventsAdminService
     errors
   end
 
+  def self.rsvp_attendees(id)
+    DB[:rsvps]
+      .join(:users, id: :user_id)
+      .where(Sequel[:rsvps][:event_id] => id)
+      .order(Sequel[:rsvps][:created_at])
+      .select(
+        Sequel[:users][:name],
+        Sequel[:users][:github_username],
+        Sequel[:users][:avatar_url],
+        Sequel[:users][:email],
+        Sequel[:rsvps][:created_at].as(:rsvpd_at)
+      )
+      .all
+  end
+
   def self.delete(id)
     event = Event.first(id: id)
     return unless event
