@@ -1,0 +1,87 @@
+<section class="relative overflow-hidden bg-bg border-b border-border">
+  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:48px_48px] opacity-40" aria-hidden="true"></div>
+  <div class="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-10">
+    <div class="flex items-center gap-4">
+      <a href="/admin/events" class="inline-flex items-center gap-1.5 text-sm text-foreground-muted hover:text-foreground transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
+        Back
+      </a>
+      <div>
+        <h1 class="text-2xl font-bold text-foreground font-mono">RSVPs</h1>
+        <p class="text-sm text-foreground-muted mt-0.5"><%= event.title %></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-10">
+
+  <% if attendees.empty? %>
+    <p class="text-foreground-muted">No one has RSVPd yet.</p>
+  <% else %>
+    <p class="text-sm text-foreground-muted mb-6"><%= attendees.size %> attendee<%= attendees.size == 1 ? "" : "s" %></p>
+
+    <!-- Mobile: cards -->
+    <div class="lg:hidden space-y-3">
+      <% attendees.each do |a| %>
+        <div class="rounded-xl border border-border bg-bg p-4 flex items-center gap-4">
+          <% if a[:avatar_url] && !a[:avatar_url].empty? %>
+            <img src="<%= a[:avatar_url] %>" alt="<%= a[:name] %>" class="h-10 w-10 rounded-full object-cover shrink-0" />
+          <% else %>
+            <div class="h-10 w-10 rounded-full bg-primary-muted flex items-center justify-center text-primary font-bold shrink-0">
+              <%= (a[:name] || a[:github_username] || "?")[0].upcase %>
+            </div>
+          <% end %>
+          <div class="min-w-0 flex-1">
+            <p class="font-medium text-foreground truncate"><%= a[:name] || a[:github_username] %></p>
+            <a href="https://github.com/<%= a[:github_username] %>" target="_blank" rel="noopener noreferrer"
+               class="text-xs text-primary hover:underline">@<%= a[:github_username] %></a>
+            <% if a[:email] && !a[:email].empty? %>
+              <p class="text-xs text-foreground-muted truncate"><%= a[:email] %></p>
+            <% end %>
+          </div>
+          <p class="text-xs text-foreground-muted shrink-0"><%= a[:rsvpd_at]&.strftime("%d %b %Y") %></p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Desktop: table -->
+    <div class="hidden lg:block rounded-xl border border-border overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-bg-subtle border-b border-border">
+          <tr>
+            <th class="px-4 py-3 text-left font-semibold text-foreground">Attendee</th>
+            <th class="px-4 py-3 text-left font-semibold text-foreground">GitHub</th>
+            <th class="px-4 py-3 text-left font-semibold text-foreground">Email</th>
+            <th class="px-4 py-3 text-left font-semibold text-foreground">RSVPd</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border">
+          <% attendees.each do |a| %>
+            <tr class="bg-bg hover:bg-bg-subtle transition-colors">
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <% if a[:avatar_url] && !a[:avatar_url].empty? %>
+                    <img src="<%= a[:avatar_url] %>" alt="<%= a[:name] %>" class="h-8 w-8 rounded-full object-cover shrink-0" />
+                  <% else %>
+                    <div class="h-8 w-8 rounded-full bg-primary-muted flex items-center justify-center text-primary font-bold text-xs shrink-0">
+                      <%= (a[:name] || a[:github_username] || "?")[0].upcase %>
+                    </div>
+                  <% end %>
+                  <span class="font-medium text-foreground"><%= a[:name] || a[:github_username] %></span>
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <a href="https://github.com/<%= a[:github_username] %>" target="_blank" rel="noopener noreferrer"
+                   class="text-primary hover:underline">@<%= a[:github_username] %></a>
+              </td>
+              <td class="px-4 py-3 text-foreground-muted"><%= a[:email] && !a[:email].empty? ? a[:email] : "-" %></td>
+              <td class="px-4 py-3 text-foreground-muted"><%= a[:rsvpd_at]&.strftime("%d %b %Y, %H:%M") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+</div>
