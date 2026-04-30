@@ -38,6 +38,13 @@ module Routes
             r.get { app.view("pages/admin/events/form", locals: { event: event, errors: {} }) }
           end
 
+          r.on "rsvps" do
+            r.get do
+              attendees = EventsAdminService.rsvp_attendees(id)
+              app.view("pages/admin/events/rsvps", locals: { event: event, attendees: attendees })
+            end
+          end
+
           r.post "delete" do
             EventsAdminService.delete(id)
             r.redirect "/admin/events"
