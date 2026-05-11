@@ -74,3 +74,15 @@
 
   <% end %>
 </div>
+
+<script>
+document.querySelectorAll('.delete-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var title = btn.dataset.title || 'this resource';
+    var form  = btn.closest('.delete-form');
+    window.__confirm('Delete "' + title + '"? This cannot be undone.').then(function (ok) {
+      if (ok) form.submit();
+    });
+  });
+});
+</script>
