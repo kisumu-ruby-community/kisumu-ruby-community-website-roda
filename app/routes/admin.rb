@@ -1,4 +1,5 @@
 require_relative "../services/admin/events_admin_service"
+require_relative "../services/admin/resources_admin_service"
 
 UUID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i
 
@@ -56,6 +57,48 @@ module Routes
               r.redirect "/admin/events"
             else
               app.view("pages/admin/events/form", locals: { event: event, errors: errors })
+            end
+          end
+        end
+      end
+
+      r.on "resources" do
+        r.is do
+          r.get  { app.view("pages/admin/resources/index", locals: { resources: ResourcesAdminService.all }) }
+          r.post do
+            ResourcesAdminService.create(r.params)
+            r.redirect "/admin/resources"
+          end
+        end
+
+        r.on "new" do
+          r.get { app.view("pages/admin/resources/form", locals: { resource: nil, errors: {} }) }
+        end
+
+        r.on String do |raw_id|
+          begin
+            id = validate_uuid(raw_id)
+          rescue ArgumentError
+            r.halt 400
+          end
+
+          resource = ResourcesAdminService.find(id)
+
+          r.on "edit" do
+            r.get { app.view("pages/admin/resources/form", locals: { resource: resource, errors: {} }) }
+          end
+
+          r.post "delete" do
+            ResourcesAdminService.delete(id)
+            r.redirect "/admin/resources"
+          end
+
+          r.post do
+            errors = ResourcesAdminService.update(id, r.params)
+            if errors.empty?
+              r.redirect "/admin/resources"
+            else
+              app.view("pages/admin/resources/form", locals: { resource: resource, errors: errors })
             end
           end
         end

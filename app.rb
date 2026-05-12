@@ -6,13 +6,14 @@ require_relative "config/database"
 require_relative "app/models/user"
 require_relative "app/models/event"
 require_relative "app/models/event_speaker"
+require_relative "app/models/resource"
 require_relative "app/routes/home"
 require_relative "app/routes/about"
 require_relative "app/routes/contact"
 require_relative "app/routes/events"
 # require_relative "app/routes/blog"
 # require_relative "app/routes/members"
-# require_relative "app/routes/resources"
+require_relative "app/routes/resources"
 require_relative "app/routes/admin"
 
 OmniAuth.config.allowed_request_methods = %i[get post]
@@ -89,7 +90,7 @@ class App < Roda
       response["Content-Type"] = "application/xml; charset=utf-8"
       event_ids = DB[:events].where(status: "published").select(:id).map(:id)
       base = request.base_url
-      static = ["/", "/about", "/events", "/contact"]
+      static = ["/", "/about", "/events", "/contact", "/resources"]
       urls = static.map { |p| "#{base}#{p}" } +
              event_ids.map { |id| "#{base}/events/#{id}" }
       <<~XML
@@ -117,13 +118,20 @@ class App < Roda
     r.on("about") do
       seo(
         title: "About",
-        description: "Learn about the Kisumu Ruby Community — our origin story, mission, values, and the people behind it.",
+        description: "Learn about the Kisumu Ruby Community, our origin story, mission, values, and the people behind it.",
         url: "#{request.base_url}/about"
       )
       view("pages/about", locals: Routes::AboutRoute.call(r))
     end
-    # r.on("members")   { view("pages/members",   locals: Routes::MembersRoute.call(r)) }
-    # r.on("resources") { view("pages/resources", locals: Routes::ResourcesRoute.call(r)) }
+    # r.on("members") { view("pages/members", locals: Routes::MembersRoute.call(r)) }
+    r.on("resources") do
+      seo(
+        title: "Resources",
+        description: "Curated Ruby and Rails learning paths, tools, and references for the Kisumu Ruby Community.",
+        url: "#{request.base_url}/resources"
+      )
+      view("pages/resources", locals: Routes::ResourcesRoute.call(r))
+    end
 
     r.on "contact" do
       r.get do

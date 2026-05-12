@@ -5,7 +5,7 @@ require "cloudinary"
 module ImageUpload
   MAX_SIZE = 5 * 1024 * 1024 # 5 MB
 
-  # Magic byte signatures — checked against raw file bytes, not the filename.
+  # Magic byte signatures - checked against raw file bytes, not the filename.
   MIME_SIGNATURES = {
     "image/jpeg" => ->(b) { b[0..2]  == [0xFF, 0xD8, 0xFF] },
     "image/png"  => ->(b) { b[0..7]  == [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A] },

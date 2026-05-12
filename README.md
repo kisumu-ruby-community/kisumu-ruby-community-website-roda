@@ -23,56 +23,81 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 
 ```
 .
+├── .github/
+│   ├── pull_request_template.md
+│   └── workflows/
+│       ├── fly-deploy.yml      # Deploy to Fly.io on merge to main
+│       ├── ping.yml            # Keep-alive ping for the deployed app
+│       └── pr-check.yml        # CI checks on pull requests
 ├── app/
 │   ├── assets/
 │   │   └── tailwind.css        # Tailwind CSS input (design tokens + base styles)
-│   ├── jobs/                   # Background jobs (Phase 2+)
+│   ├── jobs/                   # Background jobs (placeholder)
 │   ├── models/                 # Sequel models
-│   │   ├── user.rb
-│   │   ├── profile.rb
 │   │   ├── event.rb
 │   │   ├── event_speaker.rb
-│   │   ├── post.rb
+│   │   ├── post.rb             # stub
+│   │   ├── profile.rb          # stub
 │   │   ├── resource.rb
-│   │   ├── subscriber.rb
-│   │   └── sponsor.rb
+│   │   ├── sponsor.rb          # stub
+│   │   ├── subscriber.rb       # stub
+│   │   └── user.rb
 │   ├── routes/                 # Route handler classes
-│   │   ├── home.rb
 │   │   ├── about.rb
+│   │   ├── admin.rb
+│   │   ├── blog.rb             # stub
 │   │   ├── contact.rb
 │   │   ├── events.rb
-│   │   ├── blog.rb
-│   │   ├── members.rb
-│   │   ├── resources.rb
-│   │   └── join.rb             # Redirects to /contact
+│   │   ├── home.rb
+│   │   ├── join.rb             # Redirects to /contact
+│   │   ├── members.rb          # stub
+│   │   └── resources.rb
 │   ├── services/               # Business logic
-│   │   ├── home_service.rb
+│   │   ├── admin/
+│   │   │   ├── events_admin_service.rb
+│   │   │   └── resources_admin_service.rb
 │   │   ├── about_service.rb
+│   │   ├── blog_service.rb     # stub
 │   │   ├── contact_service.rb
 │   │   ├── events_service.rb
-│   │   ├── blog_service.rb
-│   │   ├── members_service.rb
+│   │   ├── home_service.rb
+│   │   ├── join_service.rb
+│   │   ├── members_service.rb  # stub
 │   │   └── resources_service.rb
-│   ├── validators/             # Input validation
+│   ├── validators/             # Input validation (placeholder)
 │   └── views/
 │       ├── pages/
-│       │   ├── index.erb       # Homepage
-│       │   ├── about.erb
-│       │   ├── contact.erb
-│       │   ├── members.erb
-│       │   ├── resources.erb
+│       │   ├── admin/
+│       │   │   ├── events/
+│       │   │   │   ├── form.erb    # Create / edit event
+│       │   │   │   ├── index.erb   # Events list
+│       │   │   │   └── rsvps.erb   # Event attendees
+│       │   │   └── resources/
+│       │   │       ├── form.erb    # Create / edit resource
+│       │   │       └── index.erb   # Resources list
+│       │   ├── blog/
+│       │   │   ├── index.erb   # Blog list (stub)
+│       │   │   └── show.erb    # Blog post detail (stub)
 │       │   ├── events/
 │       │   │   ├── index.erb   # Events list
 │       │   │   └── show.erb    # Event detail
-│       │   └── blog/
-│       │       ├── index.erb   # Blog list
-│       │       └── show.erb    # Blog post detail
+│       │   ├── 404.erb
+│       │   ├── 500.erb
+│       │   ├── about.erb
+│       │   ├── contact.erb
+│       │   ├── index.erb       # Homepage
+│       │   ├── join.erb
+│       │   ├── members.erb     # stub
+│       │   └── resources.erb
 │       ├── partials/
+│       │   ├── admin_nav.erb   # Shared admin tab navigation
+│       │   ├── footer.erb
 │       │   ├── header.erb
-│       │   └── footer.erb
+│       │   └── seo.erb         # SEO meta tags partial
 │       └── layout.erb
 ├── config/
-│   └── database.rb             # Sequel DB connection
+│   ├── database.rb             # Sequel DB connection
+│   └── rack_attack.rb          # Rate limiting / throttling
 ├── db/
 │   ├── 001_create_users.rb
 │   ├── 002_create_events.rb
@@ -82,41 +107,70 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 │   ├── 006_create_subscribers.rb
 │   ├── 007_create_sponsors.rb
 │   ├── 008_create_rsvps.rb
+│   ├── 009_update_users_for_github_oauth.rb
+│   ├── 010_update_events.rb
+│   ├── 011_add_description_to_resources.rb
 │   └── seeds.rb
 ├── guide/
 │   └── project-description.md  # Full feature requirements
 ├── lib/
+│   ├── display_count.rb
+│   ├── middleware/
+│   │   └── security_headers.rb
 │   └── utils/
-│       └── create_user_table.sh
+│       └── image_upload.rb
 ├── public/
 │   ├── assets/
 │   │   └── logo/
 │   │       └── KRC-1.png
-│   └── style.css               # Compiled Tailwind CSS output
+│   ├── uploads/                # Local image uploads (dev only)
+│   ├── manifest.json           # PWA manifest
+│   ├── robots.txt
+│   ├── style.css               # Compiled Tailwind CSS output
+│   └── sw.js                   # Service worker
 ├── tests/
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── fly.toml                    # Fly.io deployment config
 ├── app.rb                      # Main application
 ├── config.ru                   # Rack entry point
 ├── Gemfile
-└── package.json
+├── Gemfile.lock
+├── package.json
+└── package-lock.json
 ```
 
 ---
 
 ## Routes
 
-| Method | Path          | Description            |
-|--------|---------------|------------------------|
-| GET    | /             | Homepage               |
-| GET    | /about        | About page             |
-| GET    | /contact      | Contact & Join page    |
-| POST   | /contact      | Submit contact/proposal form |
-| GET    | /events       | Events list            |
-| GET    | /events/:id   | Event detail           |
-| GET    | /blog         | Blog list              |
-| GET    | /blog/:slug   | Blog post detail       |
-| GET    | /members      | Public member directory |
-| GET    | /resources    | Resources page         |
-| GET    | /join         | Redirects to /contact  |
+| Method | Path                          | Description                        |
+|--------|-------------------------------|------------------------------------|
+| GET    | /                             | Homepage                           |
+| GET    | /about                        | About page                         |
+| GET    | /contact                      | Contact & Join page                |
+| POST   | /contact                      | Submit contact/proposal form       |
+| GET    | /events                       | Events list                        |
+| GET    | /events/:id                   | Event detail                       |
+| POST   | /events/:id/rsvp              | RSVP to an event                   |
+| POST   | /events/:id/rsvp/cancel       | Cancel RSVP                        |
+| GET    | /resources                    | Resources page                     |
+| GET    | /join                         | Redirects to /contact              |
+| GET    | /admin/events                 | Admin — events list                |
+| GET    | /admin/events/new             | Admin — new event form             |
+| POST   | /admin/events                 | Admin — create event               |
+| GET    | /admin/events/:id/edit        | Admin — edit event form            |
+| POST   | /admin/events/:id             | Admin — update event               |
+| POST   | /admin/events/:id/delete      | Admin — delete event               |
+| GET    | /admin/events/:id/rsvps       | Admin — view event attendees       |
+| GET    | /admin/resources              | Admin — resources list             |
+| GET    | /admin/resources/new          | Admin — new resource form          |
+| POST   | /admin/resources              | Admin — create resource            |
+| GET    | /admin/resources/:id/edit     | Admin — edit resource form         |
+| POST   | /admin/resources/:id          | Admin — update resource            |
+| POST   | /admin/resources/:id/delete   | Admin — delete resource            |
 
 ---
 
@@ -129,7 +183,7 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 | `events`         | id (uuid), title, description, type, date, location, cover_image, status, created_by |
 | `event_speakers` | id (uuid), event_id, name, bio, photo_url                              |
 | `posts`          | id (uuid), title, slug, content, author_id, cover_image, tags, status, published_at |
-| `resources`      | id (uuid), title, url, category, submitted_by, is_approved             |
+| `resources`      | id (uuid), title, url, category, description, submitted_by, is_approved, created_at |
 | `subscribers`    | id (uuid), email, subscribed_at                                        |
 | `sponsors`       | id (uuid), name, logo_url, website_url, is_active                      |
 | `rsvps`          | id (uuid), event_id, user_id, created_at                               |
@@ -204,7 +258,14 @@ createdb kisumu_ruby_community
 ### 6. Run migrations
 
 ```bash
-bundle exec sequel -m db $DATABASE_URL
+bundle exec ruby -e "
+  require 'dotenv/load'
+  require 'sequel'
+  require 'sequel/extensions/migration'
+  DB = Sequel.connect(ENV.fetch('DATABASE_URL'))
+  Sequel::Migrator.run(DB, 'db')
+  puts 'Migrations complete. Version: ' + DB[:schema_info].first[:version].to_s
+"
 ```
 
 ### 7. Seed the database (optional)
