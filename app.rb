@@ -42,6 +42,31 @@ class App < Roda
       scope: "user:email"
   end
 
+  # Social URL helpers (read from ENV with defaults)
+  def social_whatsapp_url
+    ENV.fetch("SOCIAL_WHATSAPP_URL", "https://chat.whatsapp.com/EejRtjH6wT5IiYDlPJ0UtL")
+  end
+
+  def social_discord_url
+    ENV.fetch("SOCIAL_DISCORD_URL", "https://discord.gg/gA49HjpwC")
+  end
+
+  def social_github_url
+    ENV.fetch("SOCIAL_GITHUB_URL", "https://github.com/kisumu-ruby-community")
+  end
+
+  def social_twitter_url
+    ENV.fetch("SOCIAL_TWITTER_URL", "https://x.com/KisumuRuby")
+  end
+
+  def social_linkedin_url
+    ENV.fetch("SOCIAL_LINKEDIN_URL", "https://www.linkedin.com/in/kisumu-ruby-community-747847406")
+  end
+
+  def social_facebook_url
+    ENV.fetch("SOCIAL_FACEBOOK_URL", "https://web.facebook.com/groups/kisumuruby")
+  end
+
   # SEO helper
   def seo(opts = {})
     @seo = opts
