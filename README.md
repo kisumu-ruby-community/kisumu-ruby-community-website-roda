@@ -34,6 +34,7 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 │   │   └── tailwind.css        # Tailwind CSS input (design tokens + base styles)
 │   ├── jobs/                   # Background jobs (placeholder)
 │   ├── models/                 # Sequel models
+│   │   ├── company.rb
 │   │   ├── event.rb
 │   │   ├── event_speaker.rb
 │   │   ├── post.rb             # stub
@@ -46,6 +47,7 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 │   │   ├── about.rb
 │   │   ├── admin.rb
 │   │   ├── blog.rb             # stub
+│   │   ├── companies.rb
 │   │   ├── contact.rb
 │   │   ├── events.rb
 │   │   ├── home.rb
@@ -54,10 +56,12 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 │   │   └── resources.rb
 │   ├── services/               # Business logic
 │   │   ├── admin/
+│   │   │   ├── companies_admin_service.rb
 │   │   │   ├── events_admin_service.rb
 │   │   │   └── resources_admin_service.rb
 │   │   ├── about_service.rb
 │   │   ├── blog_service.rb     # stub
+│   │   ├── companies_service.rb
 │   │   ├── contact_service.rb
 │   │   ├── events_service.rb
 │   │   ├── home_service.rb
@@ -72,6 +76,9 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 │       │   │   │   ├── form.erb    # Create / edit event
 │       │   │   │   ├── index.erb   # Events list
 │       │   │   │   └── rsvps.erb   # Event attendees
+│       │   │   ├── companies/
+│       │   │   │   ├── form.erb    # Create / edit company
+│       │   │   │   └── index.erb   # Companies list
 │       │   │   └── resources/
 │       │   │       ├── form.erb    # Create / edit resource
 │       │   │       └── index.erb   # Resources list
@@ -84,6 +91,7 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 │       │   ├── 404.erb
 │       │   ├── 500.erb
 │       │   ├── about.erb
+│       │   ├── built_with_ruby.erb
 │       │   ├── contact.erb
 │       │   ├── index.erb       # Homepage
 │       │   ├── join.erb
@@ -110,6 +118,7 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 │   ├── 009_update_users_for_github_oauth.rb
 │   ├── 010_update_events.rb
 │   ├── 011_add_description_to_resources.rb
+│   ├── 012_create_companies.rb
 │   └── seeds.rb
 ├── guide/
 │   └── project-description.md  # Full feature requirements
@@ -158,6 +167,7 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 | POST   | /events/:id/rsvp              | RSVP to an event                   |
 | POST   | /events/:id/rsvp/cancel       | Cancel RSVP                        |
 | GET    | /resources                    | Resources page                     |
+| GET    | /built-with-ruby              | Built with Ruby companies page     |
 | GET    | /join                         | Redirects to /contact              |
 | GET    | /admin/events                 | Admin — events list                |
 | GET    | /admin/events/new             | Admin — new event form             |
@@ -172,6 +182,12 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 | GET    | /admin/resources/:id/edit     | Admin — edit resource form         |
 | POST   | /admin/resources/:id          | Admin — update resource            |
 | POST   | /admin/resources/:id/delete   | Admin — delete resource            |
+| GET    | /admin/companies              | Admin — companies list             |
+| GET    | /admin/companies/new          | Admin — new company form           |
+| POST   | /admin/companies              | Admin — create company             |
+| GET    | /admin/companies/:id/edit     | Admin — edit company form          |
+| POST   | /admin/companies/:id          | Admin — update company             |
+| POST   | /admin/companies/:id/delete   | Admin — delete company             |
 
 ---
 
@@ -187,6 +203,7 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 | `resources`      | id (uuid), title, url, category, description, submitted_by, is_approved, created_at |
 | `subscribers`    | id (uuid), email, subscribed_at                                        |
 | `sponsors`       | id (uuid), name, logo_url, website_url, is_active                      |
+| `companies`      | id (uuid), name, website_url, logo_url, description, country, category, is_approved, created_at |
 | `rsvps`          | id (uuid), event_id, user_id, created_at                               |
 
 ---

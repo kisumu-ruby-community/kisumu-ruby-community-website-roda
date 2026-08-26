@@ -1,5 +1,6 @@
 require_relative "../services/admin/events_admin_service"
 require_relative "../services/admin/resources_admin_service"
+require_relative "../services/admin/companies_admin_service"
 
 UUID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i
 
@@ -99,6 +100,52 @@ module Routes
               r.redirect "/admin/resources"
             else
               app.view("pages/admin/resources/form", locals: { resource: resource, errors: errors })
+            end
+          end
+        end
+      end
+
+      r.on "companies" do
+        r.is do
+          r.get { app.view("pages/admin/companies/index", locals: { companies: CompaniesAdminService.all }) }
+          r.post do
+            errors = CompaniesAdminService.create(r.params)
+            if errors.empty?
+              r.redirect "/admin/companies"
+            else
+              app.view("pages/admin/companies/form", locals: { company: nil, errors: errors })
+            end
+          end
+        end
+
+        r.on "new" do
+          r.get { app.view("pages/admin/companies/form", locals: { company: nil, errors: {} }) }
+        end
+
+        r.on String do |raw_id|
+          begin
+            id = validate_uuid(raw_id)
+          rescue ArgumentError
+            r.halt 400
+          end
+
+          company = CompaniesAdminService.find(id)
+
+          r.on "edit" do
+            r.get { app.view("pages/admin/companies/form", locals: { company: company, errors: {} }) }
+          end
+
+          r.post "delete" do
+            CompaniesAdminService.delete(id)
+            r.redirect "/admin/companies"
+          end
+
+          r.post do
+            errors = CompaniesAdminService.update(id, r.params)
+            if errors.empty?
+              r.redirect "/admin/companies"
+            else
+              app.view("pages/admin/companies/form", locals: { company: company, errors: errors })
             end
           end
         end
