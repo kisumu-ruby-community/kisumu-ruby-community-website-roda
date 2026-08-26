@@ -139,7 +139,8 @@ The official website for the Kisumu Ruby Community, a community of Ruby and Rail
 ├── Gemfile
 ├── Gemfile.lock
 ├── package.json
-└── package-lock.json
+├── package-lock.json
+└── Procfile                    # Process types for `foreman start` (web + css)
 ```
 
 ---
@@ -278,19 +279,37 @@ bundle exec ruby db/seeds.rb
 
 ## Running the App
 
-### Start the web server
+The `Procfile` defines the processes needed for local development:
+
+```
+web: rackup -s puma
+css: npx @tailwindcss/cli -i ./app/assets/tailwind.css -o ./public/style.css --watch
+```
+
+### Option A: Run both processes with Foreman
+
+[Foreman](https://github.com/ddollar/foreman) reads the `Procfile` and starts the web server and Tailwind watcher together with a single command.
 
 ```bash
+gem install foreman
+foreman start
+```
+
+The app will be available at http://localhost:9292, and `public/style.css` will rebuild automatically as you edit `app/assets/tailwind.css`.
+
+### Option B: Run processes manually
+
+If you don't have Foreman installed, start each process in its own terminal:
+
+```bash
+# Terminal 1: web server
 rackup -s puma
+
+# Terminal 2: Tailwind CSS watcher
+npx @tailwindcss/cli -i ./app/assets/tailwind.css -o ./public/style.css --watch
 ```
 
 The app will be available at http://localhost:9292.
-
-### Compile Tailwind CSS
-
-```bash
-npx @tailwindcss/cli -i ./app/assets/tailwind.css -o ./public/style.css --watch
-```
 
 ---
 
