@@ -48,7 +48,7 @@ class App < Roda
   end
 
   def social_discord_url
-    ENV.fetch("SOCIAL_DISCORD_URL", "https://discord.gg/gA49HjpwC")
+    ENV.fetch("SOCIAL_DISCORD_URL", "https://discord.gg/nwwZBycNe")
   end
 
   def social_github_url
