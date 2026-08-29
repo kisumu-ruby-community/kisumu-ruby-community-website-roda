@@ -7,6 +7,7 @@ require_relative "app/models/user"
 require_relative "app/models/event"
 require_relative "app/models/event_speaker"
 require_relative "app/models/resource"
+require_relative "app/models/company"
 require_relative "app/routes/home"
 require_relative "app/routes/about"
 require_relative "app/routes/contact"
@@ -14,6 +15,7 @@ require_relative "app/routes/events"
 # require_relative "app/routes/blog"
 # require_relative "app/routes/members"
 require_relative "app/routes/resources"
+require_relative "app/routes/companies"
 require_relative "app/routes/admin"
 
 OmniAuth.config.allowed_request_methods = %i[get post]
@@ -115,7 +117,7 @@ class App < Roda
       response["Content-Type"] = "application/xml; charset=utf-8"
       event_ids = DB[:events].where(status: "published").select(:id).map(:id)
       base = request.base_url
-      static = ["/", "/about", "/events", "/contact", "/resources"]
+      static = ["/", "/about", "/events", "/contact", "/resources", "/built-with-ruby"]
       urls = static.map { |p| "#{base}#{p}" } +
              event_ids.map { |id| "#{base}/events/#{id}" }
       <<~XML
@@ -156,6 +158,15 @@ class App < Roda
         url: "#{request.base_url}/resources"
       )
       view("pages/resources", locals: Routes::ResourcesRoute.call(r))
+    end
+
+    r.on("built-with-ruby") do
+      seo(
+        title: "Built with Ruby",
+        description: "African companies and products built with Ruby and Rails.",
+        url: "#{request.base_url}/built-with-ruby"
+      )
+      view("pages/built_with_ruby", locals: Routes::CompaniesRoute.call(r))
     end
 
     r.on "contact" do

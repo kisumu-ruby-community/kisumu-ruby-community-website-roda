@@ -1,0 +1,98 @@
+<section class="relative overflow-hidden bg-bg border-b border-border">
+  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:48px_48px] opacity-40" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute -top-20 right-0 h-[300px] w-[300px] rounded-full bg-primary opacity-[0.07] blur-3xl" aria-hidden="true"></div>
+  <div class="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-14 sm:py-18">
+    <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl font-mono">Built with Ruby</h1>
+    <p class="mt-4 text-lg text-foreground-muted max-w-2xl">African companies and products built with Ruby and Rails, proof that the ecosystem ships real, production software across the continent.</p>
+  </div>
+</section>
+
+<div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-14">
+
+  <% if companies.empty? %>
+    <p class="text-foreground-muted">No companies listed yet. Check back soon.</p>
+  <% else %>
+
+    <% unless countries.empty? %>
+      <div class="flex flex-wrap gap-2 mb-10" role="group" aria-label="Filter by country">
+        <button
+          data-filter="all"
+          class="filter-btn rounded-full border border-primary bg-primary-subtle px-4 py-1.5 text-sm font-medium text-primary transition-colors duration-150 cursor-pointer"
+        >All</button>
+        <% countries.each do |country| %>
+          <button
+            data-filter="<%= country %>"
+            class="filter-btn rounded-full border border-border px-4 py-1.5 text-sm font-medium text-foreground-muted hover:text-foreground hover:border-border-strong transition-colors duration-150 cursor-pointer"
+          ><%= country %></button>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div id="company-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <% companies.each do |company| %>
+        <div data-country="<%= company.country %>" class="company-card rounded-2xl border border-border bg-bg hover:bg-bg-subtle transition-colors overflow-hidden flex flex-col p-6 gap-3">
+          <div class="flex items-center gap-3">
+            <% if company.logo_url %>
+              <img src="<%= company.logo_url %>" alt="<%= company.name %> logo" class="h-10 w-10 rounded-lg object-contain border border-border bg-bg" />
+            <% end %>
+            <div class="flex flex-wrap items-center gap-2">
+              <% if company.country %>
+                <span class="inline-flex text-xs rounded-full bg-primary-muted text-primary px-2.5 py-0.5 font-medium"><%= company.country %></span>
+              <% end %>
+              <% if company.category %>
+                <span class="inline-flex text-xs rounded-full border border-border px-2.5 py-0.5 font-medium text-foreground-muted"><%= company.category %></span>
+              <% end %>
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col gap-2">
+            <a
+              href="<%= company.website_url %>"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-start gap-1.5 font-semibold text-foreground hover:text-primary transition-colors duration-150 group"
+            >
+              <span><%= company.name %></span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mt-0.5 shrink-0 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6m0 0v6m0-6L10 14"/>
+              </svg>
+            </a>
+            <% if company.description %>
+              <p class="text-sm text-foreground-muted leading-relaxed"><%= company.description %></p>
+            <% end %>
+            <p class="text-xs text-foreground-subtle font-mono mt-auto"><%= company.display_host %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  <% end %>
+</div>
+
+<script>
+  (function () {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const cards   = document.querySelectorAll('.company-card');
+
+    function setFilter(filter) {
+      buttons.forEach(function (btn) {
+        const active = btn.dataset.filter === filter;
+        btn.classList.toggle('border-primary',    active);
+        btn.classList.toggle('bg-primary-subtle', active);
+        btn.classList.toggle('text-primary',      active);
+        btn.classList.toggle('border-border',     !active);
+        btn.classList.toggle('text-foreground-muted', !active);
+      });
+
+      cards.forEach(function (card) {
+        const match = filter === 'all' || card.dataset.country === filter;
+        card.style.display = match ? '' : 'none';
+      });
+    }
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setFilter(btn.dataset.filter);
+      });
+    });
+  })();
+</script>
